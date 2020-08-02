@@ -19,7 +19,7 @@
   (make-package "MUMBLE" :use nil))
 
 #+clisp
-(lisp:in-package "MUMBLE" :use '())
+(cl:in-package "MUMBLE" :use '())
 
 
 ;;; The actual implementation of the mumble compatibility library happens
@@ -30,10 +30,10 @@
 
 #-clisp
 (unless (find-package "MUMBLE-IMPLEMENTATION")
-  (make-package "MUMBLE-IMPLEMENTATION" :use '("LISP")))
+  (make-package "MUMBLE-IMPLEMENTATION" :use '("CL")))
 
 #+clisp
-(lisp:in-package "MUMBLE-IMPLEMENTATION" :use '("LISP"))
+(cl:in-package "MUMBLE-IMPLEMENTATION" :use '("CL"))
 
 
 
