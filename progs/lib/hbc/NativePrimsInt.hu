@@ -1,0 +1,4 @@
+:output $LIBRARYBIN/
+:o= all
+NativePrims.scm
+NativePrims.hi

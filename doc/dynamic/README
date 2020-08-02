@@ -1,0 +1,24 @@
+
+This describes the Dynamic typing system used in Yale Haskell.
+
+The paper found here describes the basics of dynamic typing.
+
+A good operational introduction to dynamic typing can be found in the
+online tutorial.
+
+Details can be found in $PRELUDE/PreludeDynamic and
+$PRELUDE/PreludeDeriving
+
+The mechanism for creating new derivable instances is not yet
+documented except for the tutorial pages and comments in PreludeDeriving.
+
+I have not yet implemented skolem types correctly in recursive
+functions.   In
+
+f :: [a] -> [Dynamic]
+f [] = []
+f (x:xs) = toDynamic x : f dx
+
+each dynamic created will have a different skolem type.
+
+

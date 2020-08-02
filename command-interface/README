@@ -1,0 +1,10 @@
+This directory contains the files that define the user interface to the
+Yale Haskell system.
+
+interface-prims.scm -- low-level support code.
+
+vanilla.scm -- a vanilla read-eval-print loop interface
+
+emacs-support.scm -- some additional support functions used to communicate
+  with the GNU Emacs haskell mode.
+

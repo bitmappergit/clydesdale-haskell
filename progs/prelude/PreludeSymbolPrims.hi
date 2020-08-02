@@ -1,0 +1,19 @@
+interface SymbolPrims where
+
+{-# Prelude #-}
+
+import Symbol(Symbol)
+
+-- Danger!!  The function genSymbol is not referentially transparent.
+-- Don't use this unless you know what you are doing!!
+
+symbolToString :: Symbol -> String
+stringToSymbol :: String -> Symbol
+eqSymbol :: Symbol -> Symbol -> Bool
+genSymbol :: String -> Symbol
+
+{-# symbolToString :: LispName("symbol->string"), Complexity(1)
+    stringToSymbol :: LispName("string->symbol"), Complexity(1)
+    eqSymbol :: LispName("eq?"), Complexity(1)
+    genSymbol :: LispName("gensym"), Complexity(1)
+#-}

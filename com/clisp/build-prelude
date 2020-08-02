@@ -1,0 +1,22 @@
+#!/bin/sh
+# build-prelude -- recompile the prelude, saving the old one as old-prelude.*
+#
+cd $Y2
+export PRELUDEBIN=$Y2/progs/prelude/clisp
+rm -f $PRELUDEBIN/old*
+if test -e $PRELUDEBIN/Prelude.fas; then
+  for i in $PRELUDEBIN/Prelude*.{fas,lib,scm}; do
+    mv $i $PRELUDEBIN/old-`basename $i`
+  done
+fi
+# Need a big heap to compile the prelude.
+$CLISP -m 16MB -x '
+(load "cl-support/cl-init.lisp")
+(in-package "MUMBLE-USER")
+(setf *printers* (quote (phase-time dump-stat)))
+(setf *code-chunk-size* 20)
+(setf *compile-interface* (quote #t))
+(setf *interface-code-quality* 2)
+(setf *interface-chunk-size* (quote #f))
+(compile/compile *prelude-unit-filename*)
+'

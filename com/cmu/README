@@ -1,0 +1,55 @@
+This directory contains command scripts used for building Yale Haskell
+from the source distribution under CMU Common Lisp on the sparc.
+
+We have been using version 17e of CMU Common Lisp to build Haskell.
+You can ftp this from lisp-rt1.slisp.cs.cmu.edu (128.2.217.9).  Unlike
+some previous versions of CMU CL, 17e works on both sun4m and sun4c
+architectures without modification.
+
+We have discovered a rather nasty bug in CMU CL's compiler that sometimes
+causes Haskell to get random bus errors.  We've reported this problem
+to CMU and they're working on a fix.
+
+It is likely that you will run into problems with inadequate stack space
+using Haskell built with the standard version of CMU Common Lisp.
+Increasing the stack size involves rebuilding CMU Lisp from scratch.
+We have already done this for the precompiled CMU-based Haskell system
+we distribute (the stack allocation has been increased from 500K to
+10M).  If you want to get a copy of our lisp.core or need help in
+figuring out how to make this change yourself, let us know.
+
+Developers need to source haskell-development instead of haskell-setup
+in the .cshrc file.
+
+To rebuild the system:
+
+* You need to define environment variables Y2, CMUCL, and CMUCLLIB to 
+  point to the appropriate pathnames.  See the haskell-development 
+  script for details.
+
+* Make sure that the environment variable PRELUDEBIN (in the 
+  haskell-setup script) points to $PRELUDE/cmu.
+
+* Execute the "compile" script.  This will recompile all of the Lisp 
+  source files that make up the Yale Haskell system.  Compiled files
+  are put in the "cmu" subdirectory of each source directory.
+
+* Execute the "build-prelude" script to compile the standard prelude.  
+  Note that this process tends to use up a huge amount of memory!
+
+* Execute the "savesys" script to save a core file.
+
+* The new core file is initially called "bin/new-cmu-haskell.core".
+  Use the -core command line argument to cmucl to test it.  If it
+  works, you should rename it to "bin/haskell.core" and use the 
+  "bin/cmu-haskell" script to execute it.  Make sure HASKELLPROG 
+  (in the haskell-setup script) is correct.  Depending on where you 
+  have cmucl this script may need editing.
+
+* If you want to build an executable with the X support, you'll also
+  need to run the "build-xlib" and "savesys-xlib" scripts.  You
+  need to edit these scripts to change the pathname of the file 
+  containing the CLX library (or suppress the load entirely if you
+  are using a Lisp executable with CLX pre-loaded.).
+
+

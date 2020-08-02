@@ -1,0 +1,4 @@
+:output $LIBRARYBIN/
+:o= all
+PrintfPrims.scm
+PrintfPrims.hi

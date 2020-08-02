@@ -1,0 +1,4 @@
+:output $PRELUDEBIN/PreludeDynamicPrims
+:stable
+:prelude
+PreludeDynamicPrims.hi

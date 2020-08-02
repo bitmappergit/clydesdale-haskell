@@ -1,0 +1,11 @@
+#!/bin/sh
+# compile -- compile the Yale Haskell system from scratch.
+#
+cd $Y2
+
+# OPTIMIZE declarations are ignored by clisp
+$CLISP -x '(load "cl-support/cl-init.lisp")'
+
+# # Build a memory image called $Y2/haskell.mem
+# $CLISP -x '(load "cl-support/cl-init.lisp") (in-package "MUMBLE-USER") (lisp:saveinitmem)'
+# mv lispinit.mem haskell.mem

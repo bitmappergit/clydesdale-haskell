@@ -1,0 +1,34 @@
+This directory contains command scripts used for building Yale Haskell
+from the source distribution under AKCL.  Please note that we do not
+officially support Yale Haskell under AKCL and that none of this has
+been tested by us.
+
+Developers need to source haskell-development instead of haskell-setup
+in the .cshrc file.
+
+To rebuild the system:
+
+* You need to define environment variables Y2 and AKCL to point to the
+  appropriate pathnames.  See the haskell-development script for details.
+
+* Make sure that the environment variable PRELUDEBIN (in the 
+  haskell-setup script) points to $PRELUDE/akcl.
+
+* Execute the "compile" script.  This will recompile all of the Lisp 
+  source files that make up the Yale Haskell system.  Compiled files are
+  put in the "akcl" subdirectory of each source directory.
+
+* Execute the "build-prelude" script to compile the standard prelude.  
+  Note that this process tends to use up a huge amount of memory!
+
+* Execute the "savesys" script to build a new executable.
+
+* The new executable is initially called "bin/new-akcl-haskell".  Try
+  it out.  If it works, you should rename it to "bin/akcl-haskell".
+  Make sure that HASKELLPROG (in the haskell-setup script) is correct.
+
+We do not support our Haskell-to-CLX interface under AKCL, either.
+
+
+
+

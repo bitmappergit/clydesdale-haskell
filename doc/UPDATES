@@ -1,0 +1,7 @@
+-rw-rw-r--  1 hcompile   143606 Jun 25 17:49 dynamic/dynamic.ps
+-rw-rw-r--  1 hcompile    98534 Nov 12  1993 foreign-interface/foreign-interface.ps
+-rw-rw-r--  1 sjl         68994 Aug  5 11:48 io-proposal/haskell-io.ps
+-rw-rw-r--  1 sjl        212035 Sep 27 10:01 manual/haskell.ps
+-rw-rw-r--  1 hcompile    89836 Nov 10  1993 optimizer/optimizer.ps
+-rw-rw-r--  1 hcompile   368681 Sep 27 08:41 tutorial/tutorial.ps
+-rw-rw-r--  1 hcompile    74952 Sep 15 19:45 xinterface/xman.ps

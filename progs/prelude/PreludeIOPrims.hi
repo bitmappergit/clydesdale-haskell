@@ -1,0 +1,130 @@
+interface PreludeBltinIO where
+
+import PreludeMonadicIO(
+  IO(..), IOError, IOResult_, Handle,
+  HandleKind, OpenClosed, BufferMode, IOMode)
+infixr 1 >>, >>=
+
+{-# Prelude #-}
+
+
+-- IO Monad primitives.
+-- applyIO is used internally by the system.
+
+failwith     :: IOError -> IO a
+try          :: IO a -> (IOError -> IO a) -> IO a
+(>>=)        :: IO a -> (a -> IO b) -> IO b
+(>>)         :: IO a -> IO b -> IO b
+applyIO      :: IOResult_ a -> (a -> IOResult_ b) -> IOResult_ b 
+showError    :: IOError -> String
+
+{-#
+failwith     :: LispName("prim.failwith"),
+                Strictness("S"), NoConversion
+try          :: LispName("prim.try"),
+                Strictness("S,N"), NoConversion
+(>>=)        :: LispName("prim.thenio"),
+                Strictness("S,N"), NoConversion
+(>>)         :: LispName("prim.seqio"),
+                Strictness("S,N"), NoConversion
+applyIO      :: LispName("prim.applyio"),
+                Strictness("S,N"), NoConversion
+showError    :: LispName("prim.show-error"), Strictness("S")
+#-}
+
+
+-- Handle operations
+
+showHandle   :: Handle -> String
+stdin        :: Handle
+stdout       :: Handle
+stderr       :: Handle
+stdnull      :: Handle
+openFile     :: IOMode -> String -> IO Handle
+openChan     :: String -> IO Handle
+flush        :: Handle -> IO ()
+close        :: Handle -> IO ()
+hName        :: Handle -> IO String
+hKind        :: Handle -> IO HandleKind
+hOpen        :: Handle -> IO OpenClosed
+hFile        :: Handle -> IO Bool
+hBuff        :: Handle -> IO BufferMode
+hEcho        :: Handle -> IO Bool
+hSize        :: Handle -> IO Integer
+hPosn        :: Handle -> IO Integer
+seek         :: Handle -> Integer -> IO ()
+setBuffering :: Handle -> BufferMode -> IO ()
+setEchoing   :: Handle -> Bool -> IO ()
+
+{-#
+showHandle   :: LispName("prim.show-handle")
+stdin        :: LispName("prim.stdin")
+stdout       :: LispName("prim.stdout")
+stderr       :: LispName("prim.stderr")
+stdnull      :: LispName("prim.stdnull")
+openFile     :: LispName("prim.open-file")
+openChan     :: LispName("prim.open-chan")
+flush        :: LispName("prim.flush")
+close        :: LispName("prim.close")
+hName        :: LispName("prim.handle-name")
+hKind        :: LispName("prim.handle-kind")
+hOpen        :: LispName("prim.handle-open")
+hFile        :: LispName("prim.handle-file")
+hBuff        :: LispName("prim.handle-buff")
+hEcho        :: LispName("prim.handle-echo")
+hSize        :: LispName("prim.handle-size")
+hPosn        :: LispName("prim.handle-posn")
+seek         :: LispName("prim.seek")
+setBuffering :: LispName("prim.set-buffering")
+setEchoing   :: LispName("prim.set-echoing")
+#-}
+
+
+-- input operations
+
+ready        :: Handle -> IO Bool
+hGetChar     :: Handle -> IO Char
+getContents  :: Handle -> IO String
+
+{-#
+ready        :: LispName("prim.ready")
+hGetChar     :: LispName("prim.get-char")
+getContents  :: LispName("prim.get-contents"), NoConversion
+#-}
+
+
+-- output operations
+
+hPutChar     :: Handle -> Char -> IO ()
+
+{-#
+hPutChar     :: LispName("prim.put-char")
+#-}
+
+
+-- Operating system interaction
+
+deleteFile   :: String -> IO ()
+statusFile   :: String -> IO String
+getArgs      :: IO [String]
+getProgName  :: IO String
+getEnv       :: String -> IO String
+setEnv       :: String -> String -> IO ()
+getClock     :: IO Integer
+getCpuTime   :: IO Integer
+process      :: String -> Handle -> Handle -> Handle -> IO ()
+system       :: String -> IO String
+
+
+{-#
+deleteFile   :: LispName("prim.delete-file")
+statusFile   :: LispName("prim.status-file")
+getArgs      :: LispName("prim.getargs")
+getProgName  :: LispName("prim.getprogname")
+getEnv       :: LispName("prim.getenv")
+setEnv       :: LispName("prim.setenv")
+getClock     :: LispName("prim.getclock")
+getCpuTime   :: LispName("prim.getcputime")
+process      :: LispName("prim.run-process")
+system       :: LispName("prim.system")
+#-}

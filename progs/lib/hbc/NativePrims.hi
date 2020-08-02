@@ -1,0 +1,90 @@
+-- NativePrims.hi -- primitives for native data conversions and I/O
+--
+-- author :  Sandra Loosemore
+-- date   :  07 Jun 1994
+--
+--
+
+interface NativePrims where
+
+import Native(Byte,Bytes,ByteFile)
+import Prelude(Maybe)
+
+
+-- primitive operations on byte files
+
+primOpenInputByteFile	:: String -> IO (ByteFile)
+primOpenOutputByteFile	:: String -> IO (ByteFile)
+primCloseByteFile	:: ByteFile -> IO ()
+
+
+primByteShowByteFile	:: Byte -> ByteFile -> IO ()
+primByteReadByteFile	:: ByteFile -> IO (Maybe Byte)
+
+
+-- conversion functions
+
+primCharShowBytes	:: Char -> Bytes -> Bytes
+primCharReadBytes	:: Bytes -> Maybe(Char,Bytes)
+primCharShowByteFile	:: Char -> ByteFile -> IO ()
+primCharReadByteFile	:: ByteFile -> IO (Maybe Char)
+
+primIntShowBytes	:: Int -> Bytes -> Bytes
+primIntReadBytes	:: Bytes -> Maybe(Int,Bytes)
+primIntShowByteFile	:: Int -> ByteFile -> IO ()
+primIntReadByteFile	:: ByteFile -> IO (Maybe Int)
+
+primFloatShowBytes	:: Float -> Bytes -> Bytes
+primFloatReadBytes	:: Bytes -> Maybe(Float,Bytes)
+primFloatShowByteFile	:: Float -> ByteFile -> IO ()
+primFloatReadByteFile	:: ByteFile -> IO (Maybe Float)
+
+primDoubleShowBytes	:: Double -> Bytes -> Bytes
+primDoubleReadBytes	:: Bytes -> Maybe(Double,Bytes)
+primDoubleShowByteFile	:: Double -> ByteFile -> IO ()
+primDoubleReadByteFile	:: ByteFile -> IO (Maybe Double)
+
+primShortShowBytes	:: Int -> Bytes -> Bytes
+primShortReadBytes	:: Bytes -> Maybe(Int,Bytes)
+primShortShowByteFile	:: Int -> ByteFile -> IO ()
+primShortReadByteFile	:: ByteFile -> IO (Maybe Int)
+
+
+{-# 
+primOpenInputByteFile	:: LispName("prim.open-input-byte-file")
+primOpenOutputByteFile	:: LispName("prim.open-output-byte-file")
+primCloseByteFile	:: LispName("prim.close-byte-file")
+
+primByteShowByteFile	:: LispName("prim.show-byte-file")
+primByteReadByteFile	:: LispName("prim.read-byte-file")
+
+primCharShowBytes	:: LispName("prim.char-show-bytes"), NoConversion,
+				Strictness("S,N")
+primCharReadBytes	:: LispName("prim.char-read-bytes"), NoConversion
+primCharShowByteFile	:: LispName("prim.char-show-byte-file"), NoConversion
+primCharReadByteFile	:: LispName("prim.char-read-byte-file"), NoConversion
+
+primIntShowBytes	:: LispName("prim.int-show-bytes"), NoConversion,
+				Strictness("S,N")
+primIntReadBytes	:: LispName("prim.int-read-bytes"), NoConversion
+primIntShowByteFile	:: LispName("prim.int-show-byte-file"), NoConversion
+primIntReadByteFile	:: LispName("prim.int-read-byte-file"), NoConversion
+
+primFloatShowBytes	:: LispName("prim.float-show-bytes"), NoConversion,
+				Strictness("S,N")
+primFloatReadBytes	:: LispName("prim.float-read-bytes"), NoConversion
+primFloatShowByteFile	:: LispName("prim.float-show-byte-file"), NoConversion
+primFloatReadByteFile	:: LispName("prim.float-read-byte-file"), NoConversion
+
+primDoubleShowBytes	:: LispName("prim.double-show-bytes"), NoConversion,
+				Strictness("S,N")
+primDoubleReadBytes	:: LispName("prim.double-read-bytes"), NoConversion
+primDoubleShowByteFile	:: LispName("prim.double-show-byte-file"), NoConversion
+primDoubleReadByteFile	:: LispName("prim.double-read-byte-file"), NoConversion
+
+primShortShowBytes	:: LispName("prim.short-show-bytes"), NoConversion,
+				Strictness("S,N")
+primShortReadBytes	:: LispName("prim.short-read-bytes"), NoConversion
+primShortShowByteFile	:: LispName("prim.short-show-byte-file"), NoConversion
+primShortReadByteFile	:: LispName("prim.short-read-byte-file"), NoConversion
+#-}

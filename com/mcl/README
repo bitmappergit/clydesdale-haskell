@@ -1,0 +1,53 @@
+This directory contains support for Macintosh Common Lisp.
+
+Since the Mac doesn't have a shell, the file mcl-setup.lisp contains
+various Lisp functions to use to rebuild the system.
+
+To rebuild Yale Haskell on the Mac:
+
+  * If you are rebuilding from the Unix tar distribution, copy
+    the tar file for the source distribution to your Mac and untar
+    it.  Make sure you set the tar option for "convert newlines" and
+    set the default file creator to "CCL2" and the default file type to
+    "TEXT" before extracting.   
+
+    You can use the tweak-files.lisp script to set the creators of the 
+    files more intelligently.
+
+    Also, un-binhex the file haskell.rsrc.hqx in this directory.
+
+  * If you have installed Haskell somewhere other than Macintosh HD:haskell,
+    edit the various scripts in this directory to reflect the place where 
+    you unpacked the files on your machine.  
+
+  * We recommend that you tweak the memory partition size for your copy
+    of MCL to at least 20MB.  You may need to enable virtual memory and
+    32-bit addressing on the memory control panel to get this to work.
+
+  * mcl-setup.lisp contains some shared support and is loaded automatically
+    by the scripts that need it.  The other scripts do what they say they 
+    do; just load them into a fresh MCL.  The easiest way to run them is
+    just to double-click on the script and then do "Eval Buffer" from
+    the menu.  To build from scratch, you need to first do the 
+    "build-prelude" script, and then (in a fresh Lisp) the "savesys"
+    script.
+
+  * By default, savesys.lisp creates an executable without the file
+    compiler loaded.  (This is to comply with the MCL licensing agreements
+    for standalone executables.)  If you have your own copy of MCL and
+    are rebuilding Yale Haskell from the source distribution for your
+    own use, this restriction doesn't apply to you, and you should
+    comment out the relevant line at the end of the file that disables
+    the compiler.
+
+  * After you have built the executable, use the resource editor to copy
+    the resources from haskell.rsrc into it.  You may need to rebuild
+    your desktop after this to make it pick up the new icons; hold down
+    command-option while restarting your machine.
+
+  * You should also move the executable from haskell/bin/new-mac-haskell
+    to just haskell/mac-haskell.  You might want to change the memory
+    partition size that it runs in, too.
+
+
+Read the notes in the manual about filenames and environment variables!!

@@ -1,0 +1,63 @@
+interface DynamicPrims where
+
+{-# Prelude #-}
+
+import DynamicInternal(Instance)
+import DynamicInternal(Magic)
+
+getAllInstances :: () -> [Instance]
+
+primApply :: Magic -> Magic -> Magic
+primApplyList :: Magic -> [Magic] -> Magic
+
+{-# getAllInstances :: LispName("prim-all-instances")
+    primApply :: LispName("prim-apply")
+    primApplyList :: LispName("prim-apply-list") #-}
+
+toMagic :: a -> Magic
+fromMagic :: Magic -> a
+
+{-# fromMagic :: LispName("prim-from-magic") 
+    toMagic :: LispName("prim-to-magic") #-}
+
+-- Support for tuple prims.
+
+makeTupleCon :: Int -> Magic
+makeTupleSel :: Int -> Int -> Magic
+
+{-# makeTupleCon :: LispName("prim-get-tuple-constructor")
+    makeTupleSel :: LispName("prim-get-tuple-selector") #-}
+
+-- For the non-strict printer:
+
+tupleFlags :: Magic -> [Bool] -> [Bool]
+
+structFlags :: Magic -> [Bool] -> [Bool]
+
+{-#  tupleFlags :: LispName("get-tuple-flags")
+     structFlags :: LispName("get-struct-flags") #-}
+
+primForced :: Magic -> Bool  -- Determines if a value has been forced or not.
+{-# primForced :: LispName("car"),Strictness("N") #-}
+
+-- This supports general structure manipulation
+
+makeGTupleConstr :: Int -> [Bool] -> Magic
+makeConstr :: Int -> Int -> [Bool] -> Magic
+makeGTupleSel :: Int -> Int -> Bool -> Magic
+makeSel :: Int -> Int -> Bool -> Magic
+makeEnumConstr :: Int -> Magic
+enumTypeToInt :: Magic -> Int
+tupleTypeToInt :: Magic -> Int
+typeToInt :: Magic -> Int
+
+{-#
+makeGTupleConstr :: LispName("d-make-tuple-constr")
+makeConstr :: LispName("d-make-constr")
+makeGTupleSel :: LispName("d-make-tuple-sel")
+makeSel :: LispName("d-make-sel")
+makeEnumConstr :: LispName("d-make-enum-constr")
+enumTypeToInt :: LispName("d-enum-type-to-int")
+tupleTypeToInt :: LispName("d-tuple-type-to-int")
+typeToInt :: LispName("d-type-to-int")
+#-}

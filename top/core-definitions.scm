@@ -1,0 +1,166 @@
+;;; This file defines core symbols - those in PreludeCore and
+;;; other Prelude symbols used in compilation.
+
+;;; This part is constructed from the export table of PreludeCore
+;;; by 'top/prelude-core-syms' and has been pasted in here.
+
+
+(DEFINE *haskell-prelude-vars*
+  '((CLASSES "Num"
+             "Integral"
+             "Eq"
+             "Text"
+             "Fractional"
+             "RealFloat"
+             "RealFrac"
+             "Enum"
+             "Ix"
+             "Floating"
+             "Ord"
+             "Real"
+             "Binary")
+    (METHODS "fromInteger"
+             "signum"
+             "abs"
+             "negate"
+             "*"
+             "-"
+             "+"
+             "toInteger"
+             "odd"
+             "even"
+             "divMod"
+             "quotRem"
+             "mod"
+             "div"
+             "rem"
+             "quot"
+             "/="
+             "=="
+             "showList"
+             "readList"
+             "showsPrec"
+             "readsPrec"
+             "fromRational"
+             "recip"
+             "/"
+             "scaleFloat"
+             "significand"
+             "exponent"
+             "encodeFloat"
+             "decodeFloat"
+             "floatRange"
+             "floatDigits"
+             "floatRadix"
+             "floor"
+             "ceiling"
+             "round"
+             "truncate"
+             "properFraction"
+             "enumFromThenTo"
+             "enumFromTo"
+             "enumFromThen"
+             "enumFrom"
+             "inRange"
+             "index"
+             "range"
+             "atanh"
+             "acosh"
+             "asinh"
+             "tanh"
+             "cosh"
+             "sinh"
+             "atan"
+             "acos"
+             "asin"
+             "tan"
+             "cos"
+             "sin"
+             "logBase"
+             "**"
+             "sqrt"
+             "log"
+             "exp"
+             "pi"
+             "min"
+             "max"
+             ">"
+             ">="
+             "<="
+             "<"
+             "toRational"
+             "showBin"
+             "readBin")
+    (TYPES "Char"
+           "Complex"
+           "Integer"
+           "Double"
+           "Bin"
+           "Array"
+           "Float"
+           "Bool"
+           "Int"
+           "Ratio"
+           "SystemState_"
+           "IOResult_")
+    (CONSTRUCTORS ":+" "True" "False" ":")
+    (SYNONYMS "ShowS" "ReadS" "String" "Rational" "IO"
+              "C_char" "C_short" "C_int" "C_long" "C_unsigned_char" 
+              "C_unsigned_short" "C_unsigned_int" "C_unsigned_long" 
+              "C_float" "C_double" "C_bool" "C_void" "C_string" "C_array")
+    (VALUES)
+    (derivings "Text" "Binary" "Eq" "Ord" "Ix" "Enum")))
+
+;;; Non PreludeCore stuff
+
+;;; This table defines all symbols in the core used internally by the
+;;; compiler.
+
+(define *haskell-noncore-vars* '(
+  (types 
+     "List"
+     "Arrow"
+     "Request"
+     "Response"
+     "UnitType"
+     "TupleDicts"
+     "Dynamic" "Magic"
+     "Signature" "Class" "DataType")
+  (constructors 
+     "MkFloat"
+     "MkDouble"
+     "MkChar"
+     "MkInteger"
+     "MkInt"
+     "Nil"
+     "UnitConstructor"
+     "MkSignature" "Tycon" "Tyvar" "MkDynamic"
+     "DSucc" "DFailure"
+     "InfixL" "InfixR" "InfixN" "NoFixity"
+     "MkDataType" "MkConstructor" "MkClass" "MkInstance"
+     "UError" "Bindings
+     ")
+  (values
+    "&&"  "||"  "primPlusInt"
+    "++" "take" "drop" "." "showChar" "shows" "showString"
+    "showParen" "lex" "readParen" "reads"
+    "primShowBinInt" "primReadBinSmallInt"
+    "error"
+    "primIntegerToInt" "primIntToInteger"
+    "primRationalToFloat" "primRationalToDouble"
+    "primNegInt" "primNegInteger" "primNegFloat" "primNegDouble" 
+    "foldr" "build" "inlineFoldr" "inlineBuild"
+    "strict2"
+    ">>=" ">>" "getIOResult" "applyIO"
+    "primAppend" "primStringEq"
+    "dictSel" "tupleEqDict" "tupleOrdDict" "tupleIxDict"
+    "tupleTextDict" "tupleBinaryDict"
+    "typeOf" "toDynamic" "buildSkolem" "fromDynamic"
+    "stringToSymbol" "genTupleType"
+    "coerceB" "coerce" "fetchDict" "fetchInstances" "allInstances"
+    "patternMatchError" "dDataTypeConstrs" "lookupConstr" "indexError"
+    "createLispEnumConstructors" "createEnumConstructors" "createConstructors"
+    "makeLispConstrFn" "makeEnumConstrFn" "makeGTupleConstrFn" "makeConstrFn") 
+  (classes
+    "EnumType" "EnumOrTupleType" "DynamicType")
+  (derivings)))

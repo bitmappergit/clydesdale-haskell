@@ -1,0 +1,4 @@
+:output $PRELUDEBIN/PreludeSymbolPrims
+:stable
+:prelude
+PreludeSymbolPrims.hi

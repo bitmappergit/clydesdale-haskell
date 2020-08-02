@@ -1,0 +1,39 @@
+This is the main directory for the 2.x release of Yale Haskell.
+
+If you are using Yale Haskell on a Unix system, you should set the
+variable $HASKELL and source the haskell-setup script in this
+directory before attempting to use Yale Haskell.
+
+If you are using Yale Haskell on a Macintosh, you can just double-click
+on the Haskell icon.
+
+If you are rebuilding from the source release, see the scripts and
+README files in the $HASKELL/com area.
+
+Please read the manual for more information about how to use and
+install Yale Haskell.
+
+
+Here are some notes about the organization of the files in this
+directory tree.
+
+Each directory containing source files has separate subdirectories to
+contain binary files for each of the various Lisps we support.  Each
+directory containing source files should also have a file that defines
+a compilation unit for that directory.  (See "support/compile.scm" for
+information about the compilation unit utility.)  "support/system.scm"
+loads all the compilation unit definitions.
+
+Loading "cl-support/cl-init.lisp" will load the entire Haskell system
+into a fresh Lisp.  The scripts in the $HASKELL/com area do this for
+you.
+
+For information about the mumble compatibility package used as the
+implementation language for the rest of the system, see
+support/mumble.txt.  We've isolated all the system-specific parts of
+the mumble support code in the "cl-support" directory.  The "support"
+directory contains higher-level mumble support stuff.
+
+We don't make extensive use of packages in our system.  Except for the
+low-level mumble support, everything is in the MUMBLE-USER package.
+

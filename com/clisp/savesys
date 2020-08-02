@@ -1,0 +1,45 @@
+#!/bin/sh
+# savesys -- build a saved executable in bin/new-clisp-haskell
+#
+cd $Y2
+export PRELUDEBIN=$Y2/progs/prelude/clisp
+$CLISP <<EOF
+(load "cl-support/cl-init.lisp")
+;; Turn off various compiler/loader messages.
+(setf *load-verbose* nil)
+(setf *compile-verbose* nil)
+(in-package "MUMBLE-USER")
+(setf *printers* '(compiling loading))
+(setf *compile-interface* '#t)
+(setf *interface-code-quality* 1)
+(setf *code-chunk-size* 20)
+;; Load the prelude.
+(compile/load *prelude-unit-filename*)
+;; CLISP doesn't have a condition system. We use the good old catch and throw.
+(setf *modules-loaded* '())
+(define (haskell-toplevel)
+  (setf lisp:*package* (lisp:find-package "MUMBLE-USER"))
+  (use-vanilla-interface)
+  ;; CLISP can't handle a pathname like .yhaskell
+  (load-init-file "$HASKELL/yhaskell.scm")
+  (load-init-file "~/yhaskell.scm")
+  (do () ('#f)
+    (lisp:catch 'restart-haskell
+      (heval)
+) ) )
+(define (restart-haskell . args)
+  (lisp:throw 'restart-haskell '#f)
+)
+;; Have to do set-up of top-level driver by hand before calling savemem.
+(setf lisp:*driver* (function haskell-toplevel))
+(setf lisp:*break-driver* (function restart-haskell))
+;; Set up the saved system.
+(lisp:savemem "bin/new-clisp-haskell.mem")
+;; CLISP exits automatically on eof.
+EOF
+psubs='"$''@"'
+cat > bin/new-clisp-haskell <<EOF
+#!/bin/sh
+exec $CLISP -q -m 10MB -M $Y2/bin/new-clisp-haskell.mem $psubs
+EOF
+chmod a+x bin/new-clisp-haskell

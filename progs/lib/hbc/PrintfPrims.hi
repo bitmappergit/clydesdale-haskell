@@ -1,0 +1,11 @@
+interface PrintfPrims where
+
+primFmte :: Int -> Double -> String
+primFmtf :: Int -> Double -> String
+primFmtg :: Int -> Double -> String
+
+{-# 
+primFmte :: LispName("prim.fmte")
+primFmtf :: LispName("prim.fmtf")
+primFmtg :: LispName("prim.fmtg")
+#-}

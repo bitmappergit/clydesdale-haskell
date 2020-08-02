@@ -1,0 +1,23 @@
+:output $PRELUDEBIN/Prelude
+:stable
+:prelude
+PreludePrims.hu
+PreludeArrayPrims.hu
+PreludeTuplePrims.hu
+PreludeIOPrims.hu
+Prelude.hs
+PreludeArray.hs
+PreludeComplex.hs
+PreludeCore.hs
+PreludeIO.hs
+PreludeIOCompat.hs
+PreludeList.hs
+PreludeRatio.hs
+PreludeText.hs
+PreludeTuple.hs
+PreludeC.hs
+PreludeSymbol.hs
+PreludeSymbolPrims.hu
+PreludeDynamic.hs
+PreludeDynamicPrims.hu
+PreludeDerivings.hs

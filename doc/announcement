@@ -1,0 +1,118 @@
+
+********************************************************************
+***  Announcing the Latest and Greatest Release of Yale Haskell  ***
+********************************************************************
+
+Yale Haskell 2.2 features a number of new features being proposed in
+the forthcoming version of the Haskell Report, 1.3.  In particular,
+this system implements the latest version of the new monadic I/O
+system.
+
+Haskell 1.3 features implemented in this release are:
+
+a) Monadic I/O.  Some of the more complex I/O functions are not yet
+implemented but most of the proposed I/O system is available.
+
+b) Some Prelude changes.  The Maybe and Either types and a number of
+other functions have been moved to the Prelude.  The Assoc type has
+been removed and replaced by 2-tuples.
+
+c) Polymorphic recursion is allowed for functions with explicit sigantures.
+
+d) The _ token can be used to denote bottom in expressions.
+
+The Yale Haskell system is a fully integrated Haskell programming
+environment.  It provides tightly coupled interactive editing,
+incremental compilation, and dynamic execution of Haskell programs.
+Two major modes of compilation, corresponding to Lisp's traditional
+"interpreted" and "compiled" modes, allow one to rapidly develop
+software (using the interpreted mode), saving performance gains till
+the software has stabilized (using the compilation mode).  Compiled
+and interpreted modules may be freely mixed in any combination.
+
+Yale Haskell is run using either a command-line interface or as an
+inferior process running under the Emacs editor.  Using the Emacs
+interface, simple two-keystroke commands evaluate expressions, run
+dialogues, compile modules, turn specific compiler diagnostics on and
+off, enable and disable various optimizers, etc.  Commands may be
+queued up arbitrarily, thus allowing, for example, a compilation to be
+running in the background as the editing of a source file continues in
+Emacs in the foreground.
+
+In addition, to further enhance incremental compilation, a "scratch
+pad" may be automatically created for any module.  Such a pad is a
+logical extension of the module, in which additional function and
+value definitions may be added, but whose evaluation does not result
+in recompilation of the module.
+
+A tutorial on Haskell is also provided in the Emacs environment.  
+It follows the Sigplan Notices Hudak/Fasel "Gentle Introduction"
+section-by-section, and encourages user interaction.  This is a very
+popular teaching device for novice users.  This has been updated to
+include the new I/O system.
+
+We also support a Macintosh version of Yale Haskell that includes its
+own integrated programming environment, complete with an Emacs-like 
+editor, pull-down menus, etc.
+
+Yale Haskell is a complete implementation of the Haskell language, but
+also contains a number of extensions, including:
+
+(1) Haskell programs can call both Lisp and C functions using a
+    flexible foreign function interface.
+
+(2) Yale Haskell includes a dynamic typing system.  Dynamic typing has
+    been used to implement derived instances in a user extensible manner.
+
+(3) A complete X window interface, based on the CLX system, is included.
+
+(4) A number of annotations are available for controlling the optimizer,
+    including those for specifying both function and data constructor
+    strictness properties, "inlining" functions, and specializing 
+    over-loaded functions.  Many standard prelude functions have been
+    specialized for better performance using these annotations.
+
+(5) Separate compilation (including mutually recursive modules) is
+    supported using a notion of a UNIT file, which is a kind of localized
+    makefile that tells the compiler about compiler options and
+    logical dependencies amongst program files.
+
+Performance of Yale Haskell's compiled code has been improved
+considerably over previous releases.  Although still not as good as
+the Glasgow and Chalmers compilers, the flexibility afforded by the
+features described earlier makes Yale Haskell a good choice for large
+systems development.  For some idea of performance, Hartel's latest
+"Nuc" benchmark runs at about the same speed under both Yale Haskell
+and hbc.  (Our experiments suggest, however, that Yale Haskell's
+compiled code is on average about 3 times slower than hbc.)
+
+The Yale Haskell systems is available on a number of popular systems;
+binaries are provided for Sun/Sparc and Macintosh, but it is possible
+to build the system on virtually any system that runs one of a number
+of Common Lisp implementations.  We do NOT support either akcl (gcl)
+or CLisp; these systems do not have adaquate performance for our
+compiler.  See the manual for details.
+
+Our system is available for anonymous ftp from the Yale Haskell ftp
+site:  (other Haskell ftp sites may also have these files)
+
+        Site     Host name              Raw IP address
+        Yale     nebula.cs.yale.edu     128.36.13.1
+
+All files are in the directory pub/haskell/yale.  Consult the README
+in this directory for further details.
+
+To obtain Yale Haskell via ftp:
+
+  - Move to the directory where you intend to place Yale Haskell
+  - Ftp to nebula and login anonymously
+  - cd to pub/haskell/yale
+  - Get the tar file: get haskell-2.2-?.tar.gz
+  - Unzip the file: (your zip utility may have a different name)
+           gzip -d *.gz
+  - Untar the file: tar xf *.tar
+  - Consult the documentation for further instructions.  The manual
+    is provided in Postscript form as doc/manual/haskell.ps.
+
+Please send any comments or questions to haskell-request@cs.yale.edu
+

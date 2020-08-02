@@ -1,0 +1,35 @@
+This directory contains command scripts used for building Yale Haskell
+from the source distribution under CLISP.  Please note that we do not
+officially support Yale Haskell under CLISP and that none of this has
+been tested by us.
+
+Developers need to source hsk-development instead of hsk-setup before using
+the Yale Haskell system.
+
+To rebuild the system:
+
+* You should have at least 8 MB RAM.
+
+* You need to define environment variables Y2 and CLISP to point to the
+  appropriate pathnames.  Execute the hsk-begin script from the top level
+  directory.
+
+* Make sure that the environment variable PRELUDEBIN (in the 
+  hsk-setup script) points to $PRELUDE/clisp.
+
+* Execute the "compile" script.  This will recompile all of the Lisp 
+  source files that make up the Yale Haskell system.  Compiled files are
+  put in the "clisp" subdirectory of each source directory.
+
+* Execute the "build-prelude" script to compile the standard prelude.
+  Note that this step will use no less than 25 MB memory (RAM + swap space).
+  If you haven't that much, skip this step.
+
+* Execute the "savesys" script to build a new executable.
+  This step uses about 10 MB memory. 8 MB RAM and some swap space should
+  suffice.
+
+* The new executable is initially called "bin/new-clisp-haskell".  Try
+  it out.  If it works, you should rename it to "bin/clisp-haskell".
+  Make sure that HASKELLPROG (in the hsk-setup script) is correct.
+

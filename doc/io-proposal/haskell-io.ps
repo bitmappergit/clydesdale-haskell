@@ -1,0 +1,4209 @@
+%!PS-Adobe-1.0
+%%Title: A Proposal for Monadic I/O in Haskell 1.3
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Courier Courier-Bold Courier-Oblique
+%%Creator: NCSA Mosaic, Postscript by Ameet Raval & Frans van Hoesel
+%%Pages: (atend)
+%%EndComments
+save
+/D {def} def /E {exch} D
+/M {moveto} D
+/S {show} D
+/R {rmoveto} D
+/L {lineto} D
+/RL {rlineto} D
+/SQ {newpath 0 0 M 0 1 L 1 1 L 1 0 L closepath} D
+/U {gsave currentpoint currentfont /FontInfo get /UnderlinePosition get
+ 0 E currentfont /FontMatrix get dtransform E pop add newpath moveto
+ dup stringwidth rlineto stroke grestore S } D
+/B {/r E D gsave -13 0  R currentpoint 
+  newpath r 0 360 arc closepath fill grestore } D
+/OB {/r E D gsave -13 0  R currentpoint 
+  newpath r 0 360 arc closepath stroke grestore } D
+/NP {xmargin topmargin translate scalfac dup scale } D
+/HR {/l E D gsave l 0 RL  stroke grestore } D
+/SF {E findfont E scalefont setfont } D
+/FF {/Courier } D
+/FB {/Courier-Bold } D
+/FI {/Courier-Oblique } D
+/RF {/Times-Roman} D
+/BF {/Times-Bold} D
+/IF {/Times-Italic} D
+/reencodeISO {
+dup dup findfont dup length dict begin
+{ 1 index /FID ne { def }{ pop pop } ifelse } forall
+/Encoding ISOLatin1Encoding D
+currentdict end definefont
+} D
+/ISOLatin1Encoding [
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/space/exclam/quotedbl/numbersign/dollar/percent/ampersand/quoteright
+/parenleft/parenright/asterisk/plus/comma/minus/period/slash
+/zero/one/two/three/four/five/six/seven/eight/nine/colon/semicolon
+/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N
+/O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright
+/asciicircum/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m
+/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar/braceright/asciitilde
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/dotlessi/grave/acute/circumflex/tilde/macron/breve
+/dotaccent/dieresis/.notdef/ring/cedilla/.notdef/hungarumlaut
+/ogonek/caron/space/exclamdown/cent/sterling/currency/yen/brokenbar
+/section/dieresis/copyright/ordfeminine/guillemotleft/logicalnot
+/hyphen/registered/macron/degree/plusminus/twosuperior/threesuperior
+/acute/mu/paragraph/periodcentered/cedilla/onesuperior/ordmasculine
+/guillemotright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex
+/Idieresis/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis
+/multiply/Oslash/Ugrave/Uacute/Ucircumflex/Udieresis/Yacute
+/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex
+/otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis
+/yacute/thorn/ydieresis
+] D
+[RF BF IF FF FB FI] {reencodeISO D} forall
+/xmargin 43 D
+/topmargin 720 D
+/scalfac 0.58401 D
+%%EndProlog
+%%Page: 1 1
+save
+NP
+0 -20 M
+RF 17 SF
+0 -13 R
+(Last Modified On Mon Jul 18 11:05:23 1994 By Andy Gordon )S
+0 -39 M
+0 -56 M
+BF 24 SF
+0 -20 R
+(A Proposal for Monadic I/O in Haskell 1.3)S
+0 -84 M
+0 -101 M
+RF 17 SF
+0 -13 R
+(If you are browsing using Mosaic, you can print this document using the Print.. option from the File menu)S
+0 -120 M
+0 -13 R
+(\(in either PostScript or ASCII formats\).)S
+0 -139 M
+0 -156 M
+0 -13 R
+(We have frozen the proposal \(from 940718\) to allow implementation and comments from would be users.)S
+0 -175 M
+0 -13 R
+(For the next few months we only intend to make changes to fix typos, mistakes and ambiguities, before a)S
+0 -194 M
+0 -13 R
+(final revision. Please email comments to Andy Gordon )S
+IF 17 SF
+(adg@cl.cam.ac.uk)S
+RF 17 SF
+( and Kevin Hammond )S
+0 -213 M
+IF 17 SF
+0 -13 R
+(kh@dcs.gla.ac.uk)S
+RF 17 SF
+(. We're maintaining a )S
+(log)U
+( of recent changes to the proposal.)S
+0 -232 M
+48 -249 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(1 Purpose, Motivation and Status)U
+( )S
+48 -268 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(2 New Types and Values)U
+( )S
+48 -287 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(3 Computations)U
+( )S
+96 -306 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(3.1 The )U
+FF 17 SF
+(PrimIO)U
+RF 17 SF
+( monad)U
+( )S
+96 -325 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(3.2 The )U
+FF 17 SF
+(IO)U
+RF 17 SF
+( monad)U
+( )S
+48 -344 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(4 Handles)U
+( )S
+96 -363 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.1 Standard Handles)U
+( )S
+96 -382 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.2 Opening and Closing Handles)U
+( )S
+96 -401 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.3 Character Input via Handles)U
+( )S
+96 -420 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.4 Character Output via Handles)U
+( )S
+96 -439 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.5 Buffering and Echoing)U
+( )S
+96 -458 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.6 Landin-stream I/O)U
+( )S
+96 -477 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.7 String-based file operations)U
+( )S
+96 -496 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.8 Handle Access)U
+( )S
+96 -515 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(4.9 Select)U
+( )S
+48 -534 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(5 Operating System Interaction)U
+( )S
+96 -553 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(5.1 Interrupts)U
+( )S
+48 -572 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(6 Monadic Combinators)U
+( )S
+48 -591 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(7 Changes to Haskell 1.2)U
+( )S
+48 -610 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Bibliography)U
+( )S
+48 -629 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Appendix: Unresolved Issues)U
+( )S
+96 -648 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(Binary Input/Output)U
+( )S
+96 -667 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(Blocking )U
+FF 17 SF
+(runProcess)U
+RF 17 SF
+( )S
+96 -686 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(More Flexible Interrupts)U
+( )S
+96 -705 M
+0 -9 R
+ 3.454545 OB
+0 -4 R
+(Exposing )U
+FF 17 SF
+(PrimIO)U
+RF 17 SF
+( )S
+48 -724 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Recent Changes to the Proposal)U
+( )S
+48 -743 M
+0 -760 M
+BF 18 SF
+0 -15 R
+(1 Purpose, Motivation and Status)S
+0 -781 M
+0 -798 M
+RF 17 SF
+0 -13 R
+(Haskell 1.3 is a revision of Haskell 1.2 \()S
+(Hudak 92)U
+(\). We propose in this document a standard monadic)S
+0 -817 M
+0 -13 R
+(programming model for input/output \(I/O\) in Haskell 1.3. Here are the highlights. )S
+0 -836 M
+48 -853 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We propose a )S
+IF 17 SF
+(monadic programming model)S
+RF 17 SF
+( \(see )S
+(Cupitt 89)U
+(, )S
+(Wadler 92)U
+(, )S
+(Gordon 92)U
+(, )S
+(Peyton Jones 93)U
+(, )S
+48 -872 M
+0 -13 R
+(Launchbury 94)U
+(, and the bibliographies of these papers\). Expressions of type )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( )S
+IF 17 SF
+(a)S
+RF 17 SF
+( denote)S
+48 -891 M
+0 -13 R
+(computations that may engage in I/O before returning an answer of type )S
+IF 17 SF
+(a)S
+RF 17 SF
+(. )S
+48 -910 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(The )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( monad admits computations that fail and recovery from such failures. )S
+48 -929 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We propose a new type of )S
+IF 17 SF
+(handles)S
+RF 17 SF
+(, to mediate character I/O on both files and channels. )S
+48 -948 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We propose input polling and input of characters. Haskell 1.2 represented character input as a single )S
+48 -967 M
+FF 17 SF
+0 -13 R
+(String)S
+RF 17 SF
+( \(that is, a lazy list of characters\), containing all the characters available for input)S
+48 -986 M
+0 -13 R
+(throughout the program run. )S
+48 -1005 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Our proposal supports the majority of Haskell 1.2 I/O operations. We judged it too complex to)S
+48 -1024 M
+0 -13 R
+(support them all. )S
+48 -1043 M
+0 -1060 M
+0 -13 R
+(Monadic programming models have proved to be more general and in many respects simpler than the)S
+0 -1079 M
+0 -13 R
+(stream-based I/O system used in Haskell 1.2. Several implementations exist. This document is intended to)S
+0 -1098 M
+0 -13 R
+(be a standard to allow programs to be ported between the various Haskell systems. We have attempted to be)S
+0 -1117 M
+0 -13 R
+(conservative. As far as possible we have included only tried and tested constructs.)S
+showpage restore
+%%Page: 2 2
+save
+NP
+RF 17 SF
+0 0 M
+0 -17 M
+0 -13 R
+(The final form of this proposal is still being discussed by the Haskell 1.3 Committee. We'd appreciate)S
+0 -36 M
+0 -13 R
+(comments on this provisional version, especially from implementors. Email )S
+0 -55 M
+FF 17 SF
+0 -13 R
+(haskell1.3@comp.vuw.ac.nz)S
+RF 17 SF
+(.)S
+0 -74 M
+0 -91 M
+0 -13 R
+(This document is a version of the )S
+IF 17 SF
+(Burns Night Proposal)S
+RF 17 SF
+( by Gill, Gordon, Hammond and Poole, edited by)S
+0 -110 M
+0 -13 R
+(Gordon and Hammond based on extensive discussion on the Haskell 1.3 Committee during March.)S
+0 -129 M
+0 -146 M
+0 -13 R
+(We write specific phrases of the object language Haskell in )S
+FF 17 SF
+(this)S
+RF 17 SF
+( font and use )S
+IF 17 SF
+(this)S
+RF 17 SF
+( font for metavariables)S
+0 -165 M
+0 -13 R
+(ranging over arbitrary phrases of the object language. For instance, Haskell function )S
+FF 17 SF
+(ident)S
+RF 17 SF
+( applied to an)S
+0 -184 M
+0 -13 R
+(arbitrary )S
+IF 17 SF
+(x)S
+RF 17 SF
+( equals )S
+IF 17 SF
+(x)S
+RF 17 SF
+(. )S
+0 -203 M
+0 -220 M
+BF 18 SF
+0 -15 R
+(2 New Types and Values)S
+0 -241 M
+0 -258 M
+RF 17 SF
+0 -13 R
+(We propose to remove the old stream-based I/O mechanism from Haskell and install in its place a new)S
+0 -277 M
+0 -13 R
+(monadic I/O mechanism. We specify in this document a new module for I/O, whose header is as follows. )S
+0 -296 M
+0 -313 M
+0 -330 M
+FF 17 SF
+0 -12 R
+(module PreludeIOMonadicIO \()S
+0 -347 M
+0 -364 M
+0 -12 R
+(-- primitive type)S
+0 -381 M
+0 -398 M
+0 -12 R
+( Handle,)S
+0 -415 M
+0 -432 M
+0 -12 R
+(-- primitive values)S
+0 -449 M
+0 -466 M
+0 -12 R
+( stdin, stdout, stderr, stdnull, openFile, openChan, flush, close,)S
+0 -483 M
+0 -12 R
+( ready, hGetChar, getContents, hPutChar, setBuffering, setEchoing,)S
+0 -500 M
+0 -12 R
+( seek, query, select, deleteFile, statusFile, statusChan, getArgs,)S
+0 -517 M
+0 -12 R
+( getProgName, getEnv, setEnv, getClock, getCpuTime, runProcess,)S
+0 -534 M
+0 -12 R
+( setInterrupt,)S
+0 -551 M
+0 -568 M
+0 -12 R
+(-- derived types)S
+0 -585 M
+0 -602 M
+0 -12 R
+( IO, IOError\(..\), IOMode\(..\), BufferMode\(..\), HandleState\(..\),)S
+0 -619 M
+0 -12 R
+( HandleKind\(..\), OpenClosed\(..\), FileChan\(..\), SelectData,)S
+0 -636 M
+0 -653 M
+0 -12 R
+(-- derived values)S
+0 -670 M
+0 -687 M
+0 -12 R
+( showError, return, \(>>=\), failwith, try, \(>>\), fail, getChar,)S
+0 -704 M
+0 -12 R
+( hPutStr, hPutText, putChar, putStr, putText, interact, readFile,)S
+0 -721 M
+0 -12 R
+( readChan, appendFile, appendChan, writeFile, system, accumulate,)S
+0 -738 M
+0 -12 R
+( accumulate_\))S
+0 -755 M
+0 -772 M
+RF 17 SF
+0 -13 R
+(We draw a distinction between )S
+IF 17 SF
+(primitive)S
+RF 17 SF
+( types and values, which are builtin to Haskell, like )S
+FF 17 SF
+(Char)S
+RF 17 SF
+( and )S
+FF 17 SF
+(ord)S
+RF 17 SF
+(,)S
+0 -791 M
+0 -13 R
+(and )S
+IF 17 SF
+(derived)S
+RF 17 SF
+( ones, which can be expressed using Haskell declarations. To specify these we use a local)S
+0 -810 M
+0 -13 R
+(primitive type constructor )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+(, a local derived type constructor )S
+FF 17 SF
+(Either)S
+RF 17 SF
+(, and local values )S
+0 -829 M
+FF 17 SF
+0 -13 R
+(returnPrimIO)S
+RF 17 SF
+(, )S
+FF 17 SF
+(thenPrimIO)S
+RF 17 SF
+( and )S
+FF 17 SF
+(either)S
+RF 17 SF
+(. These locals are not exported from the module.)S
+0 -848 M
+0 -865 M
+0 -13 R
+(In more detail than the module header, here is a complete listing of the types and values used in the)S
+0 -884 M
+0 -13 R
+(proposal. Their intended meaning comes later. Locals are marked with `)S
+FF 17 SF
+(****)S
+RF 17 SF
+('.)S
+0 -903 M
+0 -920 M
+747 HR
+0 -939 M
+0 -13 R
+(Primitive Types )S
+0 -958 M
+0 -975 M
+0 -992 M
+FF 17 SF
+0 -12 R
+(****    PrimIO,)S
+0 -1009 M
+0 -12 R
+(        Handle)S
+0 -1026 M
+0 -1043 M
+RF 17 SF
+0 -13 R
+(Primitive Values )S
+0 -1062 M
+0 -1079 M
+0 -1096 M
+FF 17 SF
+0 -12 R
+(****    returnPrimIO    :: a -> PrimIO a)S
+0 -1113 M
+0 -12 R
+(****    thenPrimIO      :: PrimIO a -> \(a -> PrimIO b\) -> PrimIO b)S
+showpage restore
+%%Page: 3 3
+save
+NP
+FF 17 SF
+0 0 M
+0 -12 R
+(        stdin           :: Handle)S
+0 -17 M
+0 -12 R
+(        stdout          :: Handle)S
+0 -34 M
+0 -12 R
+(        stderr          :: Handle)S
+0 -51 M
+0 -12 R
+(        stdnull         :: Handle)S
+0 -68 M
+0 -12 R
+(        openFile        :: IOMode -> String -> IO Handle)S
+0 -85 M
+0 -12 R
+(        openChan        :: String -> IO Handle)S
+0 -102 M
+0 -12 R
+(        flush           :: Handle -> IO \(\))S
+0 -119 M
+0 -12 R
+(        close           :: Handle -> IO \(\))S
+0 -136 M
+0 -12 R
+(        ready           :: Handle -> IO Bool)S
+0 -153 M
+0 -12 R
+(        hGetChar        :: Handle -> IO Char)S
+0 -170 M
+0 -12 R
+(        getContents     :: Handle -> IO String)S
+0 -187 M
+0 -12 R
+(        hPutChar        :: Handle -> Char -> IO \(\))S
+0 -204 M
+0 -12 R
+(        setBuffering    :: Handle -> BufferMode -> IO \(\))S
+0 -221 M
+0 -12 R
+(        setEchoing      :: Handle -> Bool -> IO \(\))S
+0 -238 M
+0 -12 R
+(        seek            :: Handle -> Integer -> IO \(\))S
+0 -255 M
+0 -12 R
+(        query           :: Handle -> IO HandleState)S
+0 -272 M
+0 -12 R
+(        select          :: SelectData -> IO \(Maybe SelectData\))S
+0 -289 M
+0 -12 R
+(        deleteFile      :: String -> IO \(\))S
+0 -306 M
+0 -12 R
+(        statusFile      :: String -> IO String)S
+0 -323 M
+0 -12 R
+(        statusChan      :: String -> IO String)S
+0 -340 M
+0 -12 R
+(        getArgs         :: IO [String])S
+0 -357 M
+0 -12 R
+(        getProgName     :: IO String)S
+0 -374 M
+0 -12 R
+(        getEnv          :: String -> IO String)S
+0 -391 M
+0 -12 R
+(        setEnv          :: String -> String -> IO \(\))S
+0 -408 M
+0 -12 R
+(        getClock        :: IO Integer)S
+0 -425 M
+0 -12 R
+(        getCpuTime      :: IO Integer)S
+0 -442 M
+0 -12 R
+(        runProcess      :: String -> [Handle] -> IO \(\))S
+0 -459 M
+0 -12 R
+(        setInterrupt    :: IO \(\) -> IO \(IO \(\)\))S
+0 -476 M
+0 -493 M
+747 HR
+0 -512 M
+RF 17 SF
+0 -13 R
+(Fixities )S
+0 -531 M
+0 -548 M
+0 -565 M
+FF 17 SF
+0 -12 R
+(        infixr 1 >>, >>=)S
+0 -582 M
+0 -599 M
+RF 17 SF
+0 -13 R
+(Derived Types )S
+0 -618 M
+0 -635 M
+0 -652 M
+FF 17 SF
+0 -12 R
+(        type IO a       = PrimIO \(Either a IOError\))S
+0 -669 M
+0 -12 R
+(****    data Either a b = Left a | Right b)S
+0 -686 M
+0 -12 R
+(        data IOError    = WriteError    String)S
+0 -703 M
+0 -12 R
+(                        | ReadError     String)S
+0 -720 M
+0 -12 R
+(                        | SearchError   String)S
+0 -737 M
+0 -12 R
+(                        | FormatError   String)S
+0 -754 M
+0 -12 R
+(                        | OtherError    String)S
+0 -771 M
+0 -12 R
+(                        | EOF)S
+0 -788 M
+0 -12 R
+(        data IOMode     = ReadMode | WriteMode | AppendMode)S
+0 -805 M
+0 -12 R
+(        data BufferMode = UnBuffered | LineBuffered | BlockBuffered)S
+0 -822 M
+0 -12 R
+(        data HandleState= HandleState String HandleKind)S
+0 -839 M
+0 -12 R
+(                                OpenClosed FileChan BufferMode Bool)S
+0 -856 M
+0 -12 R
+(        data HandleKind = InputOnly | OutputOnly | InputOutput)S
+0 -873 M
+0 -12 R
+(        data OpenClosed = IsOpen | IsClosed | IsSemiClosed)S
+0 -890 M
+0 -12 R
+(        data FileChan   = IsChannel)S
+0 -907 M
+0 -12 R
+(                        | IsFile Integer Integer   -- size, posn)S
+0 -924 M
+0 -12 R
+(        type SelectData = \([Handle], [Handle], Maybe Integer\))S
+0 -941 M
+0 -958 M
+RF 17 SF
+0 -13 R
+(Derived Values )S
+0 -977 M
+0 -994 M
+0 -1011 M
+FF 17 SF
+0 -12 R
+(        showError       :: IOError -> String)S
+0 -1028 M
+0 -12 R
+(****    either          :: \(a -> c\) -> \(b -> c\) -> \(Either a b\) -> c)S
+0 -1045 M
+0 -12 R
+(        return          :: a -> IO a)S
+0 -1062 M
+0 -12 R
+(        \(>>=\)           :: IO a -> \(a -> IO b\) -> IO b)S
+0 -1079 M
+0 -12 R
+(        failwith        :: IOError -> IO a)S
+0 -1096 M
+0 -12 R
+(        try             :: IO a -> \(IOError -> IO a\) -> IO a)S
+0 -1113 M
+0 -12 R
+(        \(>>\)            :: IO a -> IO b -> IO b)S
+showpage restore
+%%Page: 4 4
+save
+NP
+FF 17 SF
+0 0 M
+0 -12 R
+(        fail            :: String -> IO a)S
+0 -17 M
+0 -12 R
+(        getChar         :: IO Char)S
+0 -34 M
+0 -12 R
+(        hPutStr         :: Handle -> String -> IO \(\))S
+0 -51 M
+0 -12 R
+(        hPutText        :: Text a => Handle -> a -> IO \(\))S
+0 -68 M
+0 -12 R
+(        putChar         :: Char -> IO \(\))S
+0 -85 M
+0 -12 R
+(        putStr          :: String -> IO \(\))S
+0 -102 M
+0 -12 R
+(        putText         :: Text a => a -> IO \(\))S
+0 -119 M
+0 -12 R
+(        interact        :: \(String -> String\) -> IO \(\))S
+0 -136 M
+0 -12 R
+(        readFile        :: String -> IO String)S
+0 -153 M
+0 -12 R
+(        readChan        :: String -> IO String)S
+0 -170 M
+0 -12 R
+(        appendFile      :: String -> String -> IO \(\))S
+0 -187 M
+0 -12 R
+(        appendChan      :: String -> String -> IO \(\))S
+0 -204 M
+0 -12 R
+(        writeFile       :: String -> String -> IO \(\))S
+0 -221 M
+0 -12 R
+(        system          :: String -> IO String)S
+0 -238 M
+0 -12 R
+(        accumulate      :: [IO a] -> IO [a])S
+0 -255 M
+0 -12 R
+(        accumulate_     :: [IO a] -> IO \(\))S
+0 -272 M
+0 -289 M
+747 HR
+0 -308 M
+0 -325 M
+BF 18 SF
+0 -15 R
+(3 Computations)S
+0 -346 M
+0 -363 M
+RF 17 SF
+0 -13 R
+(Our model is based on two monads, )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( and )S
+FF 17 SF
+(IO)S
+RF 17 SF
+(. One, )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+(, is primitive. The other, )S
+FF 17 SF
+(IO)S
+RF 17 SF
+(, type is a)S
+0 -382 M
+0 -13 R
+(specialised form of )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+(, derived using a )S
+FF 17 SF
+(type)S
+RF 17 SF
+( declaration.)S
+0 -401 M
+0 -418 M
+0 -13 R
+(\(The )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( type constructor is called )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( in the prototype )S
+FF 17 SF
+(ghc)S
+RF 17 SF
+( implementation. Our type )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( provides)S
+0 -437 M
+0 -13 R
+(more functionality than the )S
+FF 17 SF
+(ghc)S
+RF 17 SF
+( )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( type)S
+(.\) )S
+0 -456 M
+0 -473 M
+BF 17 SF
+0 -14 R
+(3.1 The )S
+FF 17 SF
+(PrimIO)S
+BF 17 SF
+( monad)S
+0 -493 M
+0 -510 M
+RF 17 SF
+0 -13 R
+(An expression of type )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( )S
+IF 17 SF
+(a)S
+RF 17 SF
+(, for some type )S
+IF 17 SF
+(a)S
+RF 17 SF
+(, denotes a )S
+IF 17 SF
+(computation)S
+RF 17 SF
+( that may engage in I/O, and, if it)S
+0 -529 M
+0 -13 R
+(terminates, returns an answer of type )S
+IF 17 SF
+(a)S
+RF 17 SF
+(. Here are two primitive operations. )S
+0 -548 M
+0 -565 M
+0 -582 M
+FF 17 SF
+0 -12 R
+(> returnPrimIO  :: a -> PrimIO a)S
+0 -599 M
+0 -12 R
+(> thenPrimIO    :: PrimIO a -> \(a -> PrimIO b\) -> PrimIO b)S
+0 -616 M
+0 -633 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(returnPrimIO)S
+RF 17 SF
+( )S
+IF 17 SF
+(x)S
+RF 17 SF
+( immediately terminates with answer )S
+IF 17 SF
+(x)S
+RF 17 SF
+(. Computation )S
+IF 17 SF
+(p)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO`)S
+0 -652 M
+IF 17 SF
+0 -13 R
+(f)S
+RF 17 SF
+( begins with )S
+FF 17 SF
+(p)S
+RF 17 SF
+(, and if )S
+FF 17 SF
+(p)S
+RF 17 SF
+( returns an answer )S
+IF 17 SF
+(x)S
+RF 17 SF
+(, continues with computation )S
+IF 17 SF
+(f x)S
+RF 17 SF
+(. )S
+0 -671 M
+0 -688 M
+0 -13 R
+(The structure \()S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+(, )S
+FF 17 SF
+(returnPrimIO)S
+RF 17 SF
+(, )S
+FF 17 SF
+(thenPrimIO)S
+RF 17 SF
+(\) is intended to be a monad, in the sense that the)S
+0 -707 M
+0 -13 R
+(following laws hold. )S
+0 -726 M
+28 -743 M
+0 -13 R
+(1. )S
+FF 17 SF
+(returnPrimIO)S
+RF 17 SF
+( )S
+IF 17 SF
+(x)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO`)S
+RF 17 SF
+( )S
+IF 17 SF
+(f)S
+RF 17 SF
+( = )S
+IF 17 SF
+(f x)S
+RF 17 SF
+(. )S
+28 -762 M
+0 -13 R
+(2. )S
+IF 17 SF
+(p)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO` returnPrimIO)S
+RF 17 SF
+( = )S
+IF 17 SF
+(p)S
+RF 17 SF
+(. )S
+28 -781 M
+0 -13 R
+(3. )S
+IF 17 SF
+(p)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO`)S
+RF 17 SF
+( \\)S
+IF 17 SF
+(x)S
+RF 17 SF
+( -> \()S
+IF 17 SF
+(f x)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO`)S
+RF 17 SF
+( )S
+IF 17 SF
+(g)S
+RF 17 SF
+(\) = \()S
+IF 17 SF
+(p)S
+RF 17 SF
+( )S
+FF 17 SF
+(`thenPrimIO`)S
+RF 17 SF
+( )S
+IF 17 SF
+(f)S
+RF 17 SF
+(\) )S
+FF 17 SF
+(`thenPrimIO`)S
+RF 17 SF
+( )S
+IF 17 SF
+(g)S
+RF 17 SF
+(. )S
+48 -800 M
+0 -817 M
+0 -13 R
+(These three laws are an equational characterisation of the categorical notion of a monad; see Wadler \()S
+(92)U
+(\),)S
+0 -836 M
+0 -13 R
+(for instance, for a discussion. )S
+0 -855 M
+0 -872 M
+BF 17 SF
+0 -14 R
+(3.2 The )S
+FF 17 SF
+(IO)S
+BF 17 SF
+( monad)S
+0 -892 M
+0 -909 M
+RF 17 SF
+0 -13 R
+(I/O operations may need to indicate errors. We provide for handling of user or system generated errors in a)S
+0 -928 M
+0 -13 R
+(specialised form of the )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( monad, called )S
+FF 17 SF
+(IO)S
+RF 17 SF
+(. )S
+0 -947 M
+0 -964 M
+0 -981 M
+FF 17 SF
+0 -12 R
+(> type IO a     = PrimIO \(Either IOError a\))S
+0 -998 M
+0 -12 R
+(> data Either a b = Left a | Right b)S
+0 -1015 M
+0 -12 R
+(>)S
+0 -1032 M
+0 -12 R
+(> data IOError  = WriteError    String)S
+0 -1049 M
+0 -12 R
+(>               | ReadError     String)S
+0 -1066 M
+0 -12 R
+(>               | SearchError   String)S
+0 -1083 M
+0 -12 R
+(>               | FormatError   String)S
+0 -1100 M
+0 -12 R
+(>               | OtherError    String)S
+0 -1117 M
+0 -12 R
+(>               | EOF)S
+showpage restore
+%%Page: 5 5
+save
+NP
+FF 17 SF
+0 0 M
+0 -12 R
+(>)S
+0 -17 M
+0 -12 R
+(> showError     :: IOError -> String)S
+0 -34 M
+0 -12 R
+(> showError \(ReadError s\)   =  "Read Error: " ++ s)S
+0 -51 M
+0 -12 R
+(> showError \(WriteError s\)  =  "Write Error: " ++ s)S
+0 -68 M
+0 -12 R
+(> showError \(FormatError s\) =  "Format Error: " ++ s)S
+0 -85 M
+0 -12 R
+(> showError \(SearchError s\) =  "Search Error: " ++ s)S
+0 -102 M
+0 -12 R
+(> showError \(OtherError s\)  =  "Other Error: " ++ s)S
+0 -119 M
+0 -12 R
+(> showError \(EOF\)           =  "End of IO Handle")S
+0 -136 M
+0 -153 M
+RF 17 SF
+0 -13 R
+(Type )S
+FF 17 SF
+(IOError)S
+RF 17 SF
+( is the same as in Haskell 1.2, except it includes a new constructor )S
+FF 17 SF
+(EOF)S
+RF 17 SF
+(; )S
+FF 17 SF
+(IOError)S
+0 -172 M
+RF 17 SF
+0 -13 R
+(provides a standard format for system-generated errors. Users can generate errors of the form )S
+0 -191 M
+FF 17 SF
+0 -13 R
+(OtherError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+(. An expression of type )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( )S
+IF 17 SF
+(a)S
+RF 17 SF
+(, for some type )S
+IF 17 SF
+(a)S
+RF 17 SF
+(, denotes a computation whose answer \(if)S
+0 -210 M
+0 -13 R
+(any is returned\) is either a result of type )S
+IF 17 SF
+(a)S
+RF 17 SF
+( or an )S
+IF 17 SF
+(error)S
+RF 17 SF
+( of type )S
+FF 17 SF
+(IOError)S
+RF 17 SF
+(. We say that the computation )S
+IF 17 SF
+(fails)S
+0 -229 M
+0 -13 R
+(with)S
+RF 17 SF
+( )S
+IF 17 SF
+(x)S
+RF 17 SF
+( if its answer is )S
+FF 17 SF
+(Left)S
+RF 17 SF
+( )S
+IF 17 SF
+(x)S
+RF 17 SF
+(. It is worth emphasising that the type system delimits the possibility of)S
+0 -248 M
+0 -13 R
+(failure: only expressions of some type )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( )S
+IF 17 SF
+(a)S
+RF 17 SF
+( can fail.)S
+0 -267 M
+0 -284 M
+0 -13 R
+(To derive operations on the )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( monad we begin with a combinator for defining functions on types of the)S
+0 -303 M
+0 -13 R
+(form )S
+FF 17 SF
+(Either)S
+RF 17 SF
+( )S
+IF 17 SF
+(a b)S
+RF 17 SF
+(. )S
+0 -322 M
+0 -339 M
+0 -356 M
+FF 17 SF
+0 -12 R
+(> either :: \(a -> c\) -> \(b -> c\) -> \(Either a b\) -> c)S
+0 -373 M
+0 -12 R
+(> either f g \(Left x\)  = f x)S
+0 -390 M
+0 -12 R
+(> either f g \(Right x\) = g x)S
+0 -407 M
+0 -424 M
+RF 17 SF
+0 -13 R
+(Now we can derive monadic operations )S
+FF 17 SF
+(return)S
+RF 17 SF
+( and )S
+FF 17 SF
+(>>=)S
+RF 17 SF
+( \(corresponding to )S
+FF 17 SF
+(returnPrimIO)S
+RF 17 SF
+( and )S
+0 -443 M
+FF 17 SF
+0 -13 R
+(thenPrimIO)S
+RF 17 SF
+( respectively\) )S
+0 -462 M
+0 -479 M
+0 -496 M
+FF 17 SF
+0 -12 R
+(> return        :: a -> IO a)S
+0 -513 M
+0 -12 R
+(> \(>>=\)         :: IO a -> \(a -> IO b\) -> IO b)S
+0 -530 M
+0 -547 M
+RF 17 SF
+0 -13 R
+(and a complementary pair for failing with and recovering from errors )S
+0 -566 M
+0 -583 M
+0 -600 M
+FF 17 SF
+0 -12 R
+(> failwith      :: IOError -> IO a)S
+0 -617 M
+0 -12 R
+(> try           :: IO a -> \(IOError -> IO a\) -> IO a)S
+0 -634 M
+0 -651 M
+RF 17 SF
+0 -13 R
+(as follows. )S
+0 -670 M
+0 -687 M
+0 -704 M
+FF 17 SF
+0 -12 R
+(> return x      = returnPrimIO \(Right x\))S
+0 -721 M
+0 -12 R
+(> p >>= f       = p `thenPrimIO` either failwith f)S
+0 -738 M
+0 -12 R
+(> failwith x    = returnPrimIO \(Left x\))S
+0 -755 M
+0 -12 R
+(> try p f       = p `thenPrimIO` either f return)S
+0 -772 M
+0 -789 M
+RF 17 SF
+0 -13 R
+(Structure \()S
+FF 17 SF
+(IO)S
+RF 17 SF
+(, )S
+FF 17 SF
+(return)S
+RF 17 SF
+(, )S
+FF 17 SF
+(>>=)S
+RF 17 SF
+(\) is a monad in the same sense as the )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( structure. The following)S
+0 -808 M
+0 -13 R
+(restricted form of )S
+FF 17 SF
+(>>=)S
+RF 17 SF
+(, )S
+0 -827 M
+0 -844 M
+0 -861 M
+FF 17 SF
+0 -12 R
+(> \(>>\)          :: IO a -> IO b -> IO b)S
+0 -878 M
+0 -12 R
+(> p >> q        = p >>= const q)S
+0 -895 M
+0 -912 M
+RF 17 SF
+0 -13 R
+(is useful for sequential composition, when we are uninterested in the result of the first computation. Here is)S
+0 -931 M
+0 -13 R
+(the fixity of these two infix operators. )S
+0 -950 M
+0 -967 M
+0 -984 M
+FF 17 SF
+0 -12 R
+(> infixr 1 >>, >>=)S
+0 -1001 M
+0 -1018 M
+RF 17 SF
+0 -13 R
+(As a convention for user-generated errors, to return an error message )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( )S
+FF 17 SF
+(:: String)S
+RF 17 SF
+(, return the error)S
+0 -1037 M
+0 -13 R
+(value )S
+FF 17 SF
+(OtherError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( via the computation )S
+FF 17 SF
+(fail)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+(. )S
+0 -1056 M
+0 -1073 M
+0 -1090 M
+FF 17 SF
+0 -12 R
+(> fail :: String -> IO a )S
+0 -1107 M
+0 -12 R
+(> fail = failwith . OtherError)S
+0 -1124 M
+showpage restore
+%%Page: 6 6
+save
+NP
+FF 17 SF
+0 0 M
+RF 17 SF
+0 -13 R
+(We recommend that )S
+FF 17 SF
+(fail)S
+RF 17 SF
+( be used instead of Haskell's )S
+FF 17 SF
+(error :: String -> a)S
+RF 17 SF
+( operation wherever)S
+0 -19 M
+0 -13 R
+(convenient. Recall that the expression )S
+FF 17 SF
+(error)S
+RF 17 SF
+( )S
+IF 17 SF
+(x)S
+RF 17 SF
+( is intended to have the same semantics as a divergent)S
+0 -38 M
+0 -13 R
+(program \("bottom"\), but implementations are to abort with an error message. )S
+0 -57 M
+0 -74 M
+BF 18 SF
+0 -15 R
+(4 Handles)S
+0 -95 M
+0 -112 M
+RF 17 SF
+0 -13 R
+(The Haskell 1.2 model of the external world includes both persistent )S
+IF 17 SF
+(files)S
+RF 17 SF
+( and ephemeral )S
+IF 17 SF
+(channels)S
+RF 17 SF
+(. The file)S
+0 -131 M
+0 -13 R
+(system is a mapping from file names to file contents, that persists between program executions. On the)S
+0 -150 M
+0 -13 R
+(other hand, on each program execution there is a mapping between channel names and sequences of values,)S
+0 -169 M
+0 -13 R
+(the channel contents for that execution. File and channel names are values of type )S
+FF 17 SF
+(String)S
+RF 17 SF
+(. File and)S
+0 -188 M
+0 -13 R
+(channel contents are values of type )S
+FF 17 SF
+(String)S
+RF 17 SF
+(. There are several standard channels for input and output.)S
+0 -207 M
+0 -13 R
+(Programs can open new anonymous channels for interaction with other operating system processes.)S
+0 -226 M
+0 -243 M
+0 -13 R
+(Haskell 1.2 input operations returned streams, that is, )S
+FF 17 SF
+(ReadFile)S
+RF 17 SF
+( and )S
+FF 17 SF
+(ReadChan)S
+RF 17 SF
+( returned a )S
+FF 17 SF
+(String)S
+0 -262 M
+RF 17 SF
+0 -13 R
+(representing either the contents of the file or the whole series of values communicated on the channel)S
+0 -281 M
+0 -13 R
+(throughout the program run. Instead, we propose to read and write finite sequences of characters from/to)S
+0 -300 M
+0 -13 R
+(files and channels, represented by values of type )S
+FF 17 SF
+(Handle)S
+RF 17 SF
+(. Each value of this type is a )S
+IF 17 SF
+(handle)S
+RF 17 SF
+(: a record used)S
+0 -319 M
+0 -13 R
+(by the Haskell run-time system to )S
+IF 17 SF
+(manage)S
+RF 17 SF
+( I/O with files and channels.)S
+0 -338 M
+0 -355 M
+0 -13 R
+(A handle has the following properties: )S
+0 -374 M
+48 -391 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(a string name; )S
+48 -410 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(whether it manages input or output or both; )S
+48 -429 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(whether it is open, closed or semi-closed; )S
+48 -448 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(whether it manages a file or a channel and, if the former, a position and length of the file; )S
+48 -467 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(whether buffering is disabled, or enabled on a line or block basis; )S
+48 -486 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(whether input echoing is enabled; )S
+48 -505 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(a buffer \(whose length may be zero\). )S
+48 -524 M
+0 -541 M
+0 -13 R
+(We say that a handle is )S
+IF 17 SF
+(readable)S
+RF 17 SF
+( if it manages only input or both input and output; likewise, it is )S
+IF 17 SF
+(writable)S
+RF 17 SF
+( if)S
+0 -560 M
+0 -13 R
+(it manages only output or both input and output. A handle is open when first allocated. Once it is closed it)S
+0 -579 M
+0 -13 R
+(can no longer be used for input or output. The operation )S
+FF 17 SF
+(getContents)S
+RF 17 SF
+( puts it into an intermediate state,)S
+0 -598 M
+0 -13 R
+(`semi-closed', during which it is effectively closed but its input values are accumulated by demand in a)S
+0 -617 M
+0 -13 R
+(special stream returned by )S
+FF 17 SF
+(getContents)S
+RF 17 SF
+(. Any operation except for )S
+FF 17 SF
+(close)S
+RF 17 SF
+( that fails because a handle is)S
+0 -636 M
+0 -13 R
+(closed, also fails if a handle is semi-closed. A semi-closed handle becomes closed either if the )S
+FF 17 SF
+(close)S
+0 -655 M
+RF 17 SF
+0 -13 R
+(operation is applied to it \(at which point the contents of the associated stream becomes fixed as if)S
+0 -674 M
+0 -13 R
+(end-of-file had been encountered\), or once all the characters available have been accumulated in its special)S
+0 -693 M
+0 -13 R
+(stream. After a handle has been closed, an implementation cannot re-use its storage while references)S
+0 -712 M
+0 -13 R
+(remain to it. )S
+0 -731 M
+0 -748 M
+BF 17 SF
+0 -14 R
+(4.1 Standard Handles)S
+0 -768 M
+0 -785 M
+RF 17 SF
+0 -13 R
+(Four handles are allocated during program initialisation. )S
+0 -804 M
+0 -821 M
+0 -838 M
+FF 17 SF
+0 -12 R
+(> stdin, stdout, stderr, stdnull :: Handle)S
+0 -855 M
+0 -872 M
+RF 17 SF
+0 -13 R
+(The first two manage input or output from the Haskell program's standard input or output channel)S
+0 -891 M
+0 -13 R
+(respectively. The third manages output to the standard error channel. The fourth is a bidirectional handle.)S
+0 -910 M
+0 -13 R
+(Input from )S
+FF 17 SF
+(stdnull)S
+RF 17 SF
+( always fails; output to it is always accepted but is not externally observable. The four)S
+0 -929 M
+0 -13 R
+(handles are initially open.)S
+0 -948 M
+0 -965 M
+BF 17 SF
+0 -14 R
+(4.2 Opening and Closing Handles)S
+0 -985 M
+0 -1002 M
+0 -1019 M
+FF 17 SF
+0 -12 R
+(> data IOMode   = ReadMode | WriteMode | AppendMode)S
+0 -1036 M
+0 -12 R
+(> openFile      :: IOMode -> String -> IO Handle)S
+0 -1053 M
+0 -12 R
+(> openChan      :: String -> IO Handle)S
+0 -1070 M
+0 -12 R
+(> flush         :: Handle -> IO \(\))S
+0 -1087 M
+0 -12 R
+(> close         :: Handle -> IO \(\))S
+0 -1104 M
+0 -1121 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(openFile)S
+RF 17 SF
+( )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( )S
+IF 17 SF
+(file)S
+RF 17 SF
+( allocates and returns a new, open, input-only or output-only handle to)S
+showpage restore
+%%Page: 7 7
+save
+NP
+RF 17 SF
+0 0 M
+0 -13 R
+(manage the file )S
+IF 17 SF
+(file)S
+RF 17 SF
+(. It manages reading if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(ReadMode)S
+RF 17 SF
+(, otherwise writing. In the latter case, if the)S
+0 -19 M
+0 -13 R
+(file does not exist, it should be created in the file system with zero length. If )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(WriteMode)S
+RF 17 SF
+( and the)S
+0 -38 M
+0 -13 R
+(file already exists, then it should be truncated to zero length. The handle is positioned at the end of the file)S
+0 -57 M
+0 -13 R
+(if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(AppendMode)S
+RF 17 SF
+(, otherwise at the beginning. The computation fails with )S
+0 -76 M
+48 -93 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SearchError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(WriteMode)S
+RF 17 SF
+( or )S
+FF 17 SF
+(AppendMode)S
+RF 17 SF
+( and file )S
+IF 17 SF
+(file)S
+RF 17 SF
+( does not exist and)S
+48 -112 M
+0 -13 R
+(cannot be created; )S
+48 -131 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SearchError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(ReadMode)S
+RF 17 SF
+( and file )S
+IF 17 SF
+(file)S
+RF 17 SF
+( does not exist; )S
+48 -150 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(WriteMode)S
+RF 17 SF
+( or )S
+FF 17 SF
+(AppendMode)S
+RF 17 SF
+( and the the handle cannot be)S
+48 -169 M
+0 -13 R
+(allocated for some other reason; )S
+48 -188 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(ReadError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(ReadMode)S
+RF 17 SF
+( and the handle cannot be allocated. )S
+48 -207 M
+0 -224 M
+0 -13 R
+(Implementations should enforce, locally to the Haskell process, multiple-reader single-writer locking on)S
+0 -243 M
+0 -13 R
+(files, which is to say that there may either be many handles on the same file for reading, or just one handle)S
+0 -262 M
+0 -13 R
+(on the file for writing. If any open or semi-closed handle is managing a file for writing, no new handle can)S
+0 -281 M
+0 -13 R
+(be allocated for that file. If any open or semi-closed handle is managing a file for reading, only new)S
+0 -300 M
+0 -13 R
+(handles with mode )S
+FF 17 SF
+(ReadOnly)S
+RF 17 SF
+( can be allocated for that file. Although the property of two files being the)S
+0 -319 M
+0 -13 R
+(same may vary between implementations, a sufficient but not necessary condition is for two files to have)S
+0 -338 M
+0 -13 R
+(the same name \(e.g., pathname\).)S
+0 -357 M
+0 -374 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(openChan)S
+RF 17 SF
+( )S
+IF 17 SF
+(chan)S
+RF 17 SF
+( allocates and returns a new handle to manage the channel identified by)S
+0 -393 M
+0 -13 R
+(string )S
+IF 17 SF
+(chan)S
+RF 17 SF
+(. If )S
+IF 17 SF
+(chan)S
+RF 17 SF
+( is the empty string )S
+FF 17 SF
+("")S
+RF 17 SF
+( the computation returns a bidirectional handle managing a new)S
+0 -412 M
+0 -13 R
+(anonymous channel, whose input and output are connected. Such a channel is intended for interaction with)S
+0 -431 M
+0 -13 R
+(an operating system process created using )S
+FF 17 SF
+(runProcess)S
+RF 17 SF
+(. Interpretation of non-empty strings is)S
+0 -450 M
+0 -13 R
+(implementation-dependent; no two handles may be opened with the same non-empty string. The)S
+0 -469 M
+0 -13 R
+(computation fails with )S
+0 -488 M
+48 -505 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SearchError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if channel )S
+IF 17 SF
+(chan)S
+RF 17 SF
+( cannot be opened or is already managed by a handle. )S
+48 -524 M
+0 -541 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(flush)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( causes any characters buffered for output in handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( to be sent immediately to)S
+0 -560 M
+0 -13 R
+(the operating system. The computation fails with )S
+0 -579 M
+48 -596 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is either not writable or closed. )S
+48 -615 M
+0 -632 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(close)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( makes handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( closed. Before the computation finishes, any characters buffered)S
+0 -651 M
+0 -13 R
+(for output and not already sent to the operating system are flushed as for )S
+FF 17 SF
+(flush)S
+RF 17 SF
+(. The computation fails)S
+0 -670 M
+0 -13 R
+(with )S
+0 -689 M
+48 -706 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(OtherError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is closed. )S
+48 -725 M
+0 -742 M
+BF 17 SF
+0 -14 R
+(4.3 Character Input via Handles)S
+0 -762 M
+0 -779 M
+0 -796 M
+FF 17 SF
+0 -12 R
+(> ready         :: Handle -> IO Bool)S
+0 -813 M
+0 -12 R
+(> hGetChar      :: Handle -> IO Char)S
+0 -830 M
+0 -12 R
+(> getContents   :: Handle -> IO String)S
+0 -847 M
+0 -12 R
+(> getChar       :: IO Char)S
+0 -864 M
+0 -881 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(ready)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( indicates whether at least one character is available for input from handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. It)S
+0 -900 M
+0 -13 R
+(fails with )S
+0 -919 M
+48 -936 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(ReadError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is closed or not readable. )S
+48 -955 M
+0 -972 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(hGetChar)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( reads the next character from handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(, blocking until a character is)S
+0 -991 M
+0 -13 R
+(available. It fails with )S
+0 -1010 M
+48 -1027 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(EOF)S
+RF 17 SF
+( if no further input is possible from )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(; )S
+48 -1046 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(ReadError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is closed or not readable. )S
+48 -1065 M
+0 -1082 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getContents)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( returns the list of characters corresponding to the unread portion of the)S
+0 -1101 M
+0 -13 R
+(channel or file managed by )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(, which is made semi-closed. It fails with )S
+0 -1120 M
+showpage restore
+%%Page: 8 8
+save
+NP
+RF 17 SF
+48 0 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(ReadError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is already closed \(or semi-closed\). )S
+48 -19 M
+0 -36 M
+0 -13 R
+(We derive a specialised form of )S
+FF 17 SF
+(hGetChar)S
+RF 17 SF
+( to act on standard input. )S
+0 -55 M
+0 -72 M
+0 -89 M
+FF 17 SF
+0 -12 R
+(> getChar       = hGetChar stdin)S
+0 -106 M
+0 -123 M
+0 -137 M
+BF 17 SF
+0 -14 R
+(4.4 Character Output via Handles)S
+0 -157 M
+0 -174 M
+0 -191 M
+FF 17 SF
+0 -12 R
+(> hPutChar      :: Handle -> Char -> IO \(\))S
+0 -208 M
+0 -12 R
+(> hPutStr       :: Handle -> String -> IO \(\))S
+0 -225 M
+0 -12 R
+(> hPutText      :: Text a => Handle -> a -> IO \(\))S
+0 -242 M
+0 -12 R
+(> putChar       :: Char -> IO \(\))S
+0 -259 M
+0 -12 R
+(> putStr        :: String -> IO \(\))S
+0 -276 M
+0 -12 R
+(> putText       :: Text a => a -> IO \(\))S
+0 -293 M
+0 -310 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(hPutChar)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( )S
+IF 17 SF
+(c)S
+RF 17 SF
+( writes the character )S
+IF 17 SF
+(c)S
+RF 17 SF
+( to the file or channel managed by )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. Characters may)S
+0 -329 M
+0 -13 R
+(be buffered if buffering is enabled for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. The computation fails with )S
+0 -348 M
+48 -365 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is either not writable or not open. )S
+48 -384 M
+0 -401 M
+0 -13 R
+(Combinator )S
+FF 17 SF
+(hPutStr)S
+RF 17 SF
+( may be implemented as a primitive, but in principle is derivable as follows. )S
+0 -420 M
+0 -437 M
+0 -454 M
+FF 17 SF
+0 -12 R
+(> hPutStr handle = foldr \(>>\) \(return \(\)\) . map \(hPutChar handle\))S
+0 -471 M
+0 -488 M
+RF 17 SF
+0 -13 R
+(Combinator )S
+FF 17 SF
+(hPutText)S
+RF 17 SF
+( admits output of any type in the )S
+FF 17 SF
+(Text)S
+RF 17 SF
+( class. )S
+0 -507 M
+0 -524 M
+0 -541 M
+FF 17 SF
+0 -12 R
+(> hPutText hdl  = hPutStr hdl . show)S
+0 -558 M
+0 -575 M
+RF 17 SF
+0 -13 R
+(We derive the following specialised operations acting on standard output. )S
+0 -594 M
+0 -611 M
+0 -628 M
+FF 17 SF
+0 -12 R
+(> putChar       = hPutChar stdout)S
+0 -645 M
+0 -12 R
+(> putStr        = hPutStr stdout)S
+0 -662 M
+0 -12 R
+(> putText       = hPutText stdout)S
+0 -679 M
+0 -696 M
+BF 17 SF
+0 -14 R
+(4.5 Buffering and Echoing)S
+0 -716 M
+0 -733 M
+0 -750 M
+FF 17 SF
+0 -12 R
+(> setBuffering  :: Handle -> BufferMode -> IO \(\))S
+0 -767 M
+0 -12 R
+(> data BufferMode = UnBuffered | LineBuffered | BlockBuffered)S
+0 -784 M
+0 -12 R
+(> setEchoing    :: Handle -> Bool -> IO \(\))S
+0 -801 M
+0 -818 M
+RF 17 SF
+0 -13 R
+(Three kinds of buffering are supported: handles may be line-buffered, block-buffered or unbuffered. These)S
+0 -837 M
+0 -13 R
+(modes have the following effects. For output, characters are written out from the internal buffer according)S
+0 -856 M
+0 -13 R
+(to the buffer mode: )S
+0 -875 M
+0 -892 M
+0 -13 R
+(line-buffered)S
+48 -911 M
+0 -13 R
+(the entire output buffer is written out whenever a newline is output, the output buffer overflows, a)S
+48 -930 M
+0 -13 R
+(flush is issued, or the handle is closed. )S
+0 -949 M
+0 -13 R
+(block-buffered)S
+48 -968 M
+0 -13 R
+(the entire output buffer is written out whenever it overflows, a flush is issued, or the handle is)S
+48 -987 M
+0 -13 R
+(closed. )S
+0 -1006 M
+0 -13 R
+(unbuffered)S
+48 -1025 M
+0 -13 R
+(characters are written immediately, and never stored in the output buffer. )S
+48 -1044 M
+0 -1061 M
+0 -13 R
+(The output buffer is emptied as soon as it has been written out.)S
+0 -1080 M
+0 -1097 M
+0 -13 R
+(Similarly, input occurs as a result of )S
+FF 17 SF
+(hGetChar)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( according to the buffer mode for handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. )S
+0 -1116 M
+showpage restore
+%%Page: 9 9
+save
+NP
+RF 17 SF
+0 0 M
+0 -13 R
+(line-buffered)S
+48 -19 M
+0 -13 R
+(when the input buffer for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is not empty, the next character is obtained from the buffer; otherwise,)S
+48 -38 M
+0 -13 R
+(when the input buffer is empty, n characters up to and including the next newline character are read)S
+48 -57 M
+0 -13 R
+(into the buffer. No characters are available until the newline character is available. )S
+0 -76 M
+0 -13 R
+(block-buffered)S
+48 -95 M
+0 -13 R
+(when the input buffer for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( becomes empty, the next block of data is read into this buffer. )S
+0 -114 M
+0 -13 R
+(unbuffered)S
+48 -133 M
+0 -13 R
+(the next character is read and returned. )S
+48 -152 M
+0 -169 M
+0 -13 R
+(The )S
+FF 17 SF
+(hGetChar)S
+RF 17 SF
+( operation always blocks if no input is available. For most implementations, files will)S
+0 -188 M
+0 -13 R
+(normally be block-buffered and terminals will normally be line-buffered. The size of the buffer is)S
+0 -207 M
+0 -13 R
+(implementation-dependent.)S
+0 -226 M
+0 -243 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(setBuffering)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( sets the mode of buffering for handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( on subsequent reads and)S
+0 -262 M
+0 -13 R
+(writes. )S
+0 -281 M
+48 -298 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(If )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(LineBuffered)S
+RF 17 SF
+(, line-buffering should be enabled. The )S
+FF 17 SF
+(BufferMode)S
+RF 17 SF
+( returned by )S
+48 -317 M
+FF 17 SF
+0 -13 R
+(query)U
+RF 17 SF
+( is )S
+FF 17 SF
+(LineBuffered)S
+RF 17 SF
+(. )S
+48 -336 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(If )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(BlockBuffered)S
+RF 17 SF
+(, then either block-buffering or line-buffering should be enabled as)S
+48 -355 M
+0 -13 R
+(appropriate for the device attached to )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. The )S
+FF 17 SF
+(BufferMode)S
+RF 17 SF
+( returned by )S
+FF 17 SF
+(query)S
+RF 17 SF
+( is )S
+48 -374 M
+FF 17 SF
+0 -13 R
+(LineBuffered)S
+RF 17 SF
+( if line-buffering is enabled, otherwise )S
+FF 17 SF
+(BlockBuffered)S
+RF 17 SF
+(. )S
+48 -393 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(If )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( is )S
+FF 17 SF
+(UnBuffered)S
+RF 17 SF
+(, then buffering is disabled for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. The )S
+FF 17 SF
+(BufferMode)S
+RF 17 SF
+( returned by )S
+48 -412 M
+FF 17 SF
+0 -13 R
+(query)S
+RF 17 SF
+( is )S
+FF 17 SF
+(UnBuffered)S
+RF 17 SF
+(. )S
+48 -431 M
+0 -448 M
+0 -13 R
+(If the buffer mode is changed from )S
+FF 17 SF
+(BlockBuffered)S
+RF 17 SF
+( or )S
+FF 17 SF
+(LineBuffered)S
+RF 17 SF
+( to )S
+FF 17 SF
+(UnBuffered)S
+RF 17 SF
+(, then any)S
+0 -467 M
+0 -13 R
+(characters in the output buffer are written to the device, and any characters in the input buffer are discarded.)S
+0 -486 M
+0 -13 R
+(The default buffering mode when a handle is opened is )S
+FF 17 SF
+(UnBuffered)S
+RF 17 SF
+( if buffering is not supported for the)S
+0 -505 M
+0 -13 R
+(device, otherwise the mode that would be set for )S
+FF 17 SF
+(BlockBuffered)S
+RF 17 SF
+(. This is the )S
+FF 17 SF
+(BufferMode)S
+RF 17 SF
+( returned)S
+0 -524 M
+0 -13 R
+(by )S
+FF 17 SF
+(query)S
+RF 17 SF
+(. The computation fails with )S
+0 -543 M
+48 -560 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if the handle is not open for writing, if the device attached to )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( does not)S
+48 -579 M
+0 -13 R
+(support the requested mode, or if some other error occurs. )S
+48 -598 M
+0 -615 M
+0 -13 R
+(An implementation is free to fail with )S
+FF 17 SF
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if the handle has already been read from or)S
+0 -634 M
+0 -13 R
+(written to.)S
+0 -653 M
+0 -670 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(setEchoing)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( )S
+IF 17 SF
+(flag)S
+RF 17 SF
+( enables echoing on input from handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( if )S
+IF 17 SF
+(flag)S
+RF 17 SF
+( is )S
+FF 17 SF
+(True)S
+RF 17 SF
+(, and)S
+0 -689 M
+0 -13 R
+(disables it if )S
+IF 17 SF
+(flag)S
+RF 17 SF
+( is )S
+FF 17 SF
+(False)S
+RF 17 SF
+(. Echoed characters appear on the device from which input for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is taken. The)S
+0 -708 M
+0 -13 R
+(computation fails with )S
+0 -727 M
+48 -744 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(OtherError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( is not open for input from a user terminal, or if echoing is not)S
+48 -763 M
+0 -13 R
+(supported for )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+(. )S
+48 -782 M
+0 -799 M
+0 -13 R
+(Similarly, an implementation is free to fail with )S
+FF 17 SF
+(WriteError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if the handle has already been read)S
+0 -818 M
+0 -13 R
+(from or written to.)S
+0 -837 M
+0 -854 M
+BF 17 SF
+0 -14 R
+(4.6 Landin-stream I/O)S
+0 -874 M
+0 -891 M
+0 -908 M
+FF 17 SF
+0 -12 R
+(> interact :: \(String -> String\) -> IO \(\))S
+0 -925 M
+0 -12 R
+(> interact f = getContents stdin >>= \(putStr . f\))S
+0 -942 M
+0 -959 M
+RF 17 SF
+0 -13 R
+(Derived combinator )S
+FF 17 SF
+(interact)S
+RF 17 SF
+( supports classical Landin-stream character I/O. )S
+0 -978 M
+0 -995 M
+BF 17 SF
+0 -14 R
+(4.7 String-based file operations)S
+0 -1015 M
+0 -1032 M
+0 -1049 M
+FF 17 SF
+0 -12 R
+(> readFile :: String -> IO String)S
+0 -1066 M
+0 -12 R
+(> readChan :: String -> IO String)S
+0 -1083 M
+0 -12 R
+(> appendFile :: String -> String -> IO \(\))S
+0 -1100 M
+0 -12 R
+(> appendChan :: String -> String -> IO \(\))S
+0 -1117 M
+0 -12 R
+(> writeFile :: String -> String -> IO \(\))S
+showpage restore
+%%Page: 10 10
+save
+NP
+FF 17 SF
+0 0 M
+0 -17 M
+RF 17 SF
+0 -13 R
+(We can simulate some of the Haskell 1.2 string-based file operations as follows. )S
+0 -36 M
+0 -51 M
+0 -67 M
+FF 14 SF
+0 -10 R
+(> readFile nme = openFile ReadMode nme >>= getContents)S
+0 -83 M
+0 -10 R
+(>)S
+0 -99 M
+0 -10 R
+(> readChan "stdin" = getContents stdin)S
+0 -115 M
+0 -10 R
+(> readChan nme     = openChan nme >>= getContents)S
+0 -131 M
+0 -10 R
+(>)S
+0 -147 M
+0 -10 R
+(> appendFile nme str =)S
+0 -163 M
+0 -10 R
+(>   openFile AppendMode nme >>= \\hdl -> hPutStr hdl str >> close hdl)S
+0 -179 M
+0 -10 R
+(>)S
+0 -195 M
+0 -10 R
+(> appendChan "stdout" = hPutStr stdout)S
+0 -211 M
+0 -10 R
+(> appendChan "stderr" = hPutStr stderr)S
+0 -227 M
+0 -10 R
+(> appendChan _        = const \(fail "Unexpected 1.2 channel"\))S
+0 -243 M
+0 -10 R
+(>)S
+0 -259 M
+0 -10 R
+(> writeFile nme str =)S
+0 -275 M
+0 -10 R
+(>   openFile WriteMode nme >>= \\hdl -> hPutStr hdl str >> close hdl)S
+0 -291 M
+0 -308 M
+BF 17 SF
+0 -14 R
+(4.8 Handle Access)S
+0 -328 M
+0 -345 M
+0 -362 M
+FF 17 SF
+0 -12 R
+(> seek  :: Handle -> Integer -> IO \(\))S
+0 -379 M
+0 -12 R
+(> query :: Handle -> IO HandleState)S
+0 -396 M
+0 -12 R
+(> data HandleState = HandleState String HandleKind)S
+0 -413 M
+0 -12 R
+(>                       OpenClosed FileChan BufferMode Bool)S
+0 -430 M
+0 -12 R
+(> data HandleKind = InputOnly | OutputOnly | InputOutput)S
+0 -447 M
+0 -12 R
+(> data OpenClosed = IsOpen | IsClosed | IsSemiClosed)S
+0 -464 M
+0 -12 R
+(> data FileChan   = IsChannel | IsFile Integer Integer   -- size, posn)S
+0 -481 M
+0 -498 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(seek)S
+RF 17 SF
+( )S
+IF 17 SF
+(handle i)S
+RF 17 SF
+( sets the position of handle )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( to integer )S
+IF 17 SF
+(i)S
+RF 17 SF
+(. The size of the file is extended to at)S
+0 -517 M
+0 -13 R
+(least the position requested if it is open for writing and position )S
+IF 17 SF
+(i)S
+RF 17 SF
+( is beyond its end. When first opened a)S
+0 -536 M
+0 -13 R
+(handle is at position 0. It fails with )S
+0 -555 M
+48 -572 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SeekError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( does not manage a file, or if both )S
+IF 17 SF
+(i)S
+RF 17 SF
+( is beyond the end of the file and the)S
+48 -591 M
+0 -13 R
+(handle is read-only, or if )S
+IF 17 SF
+(i)S
+RF 17 SF
+( is negative. )S
+48 -610 M
+0 -627 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(query)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdl)S
+RF 17 SF
+( returns a value )S
+FF 17 SF
+(HandleState)S
+RF 17 SF
+( )S
+IF 17 SF
+(nme kind oc fc mode echo)S
+RF 17 SF
+( where )S
+IF 17 SF
+(nme)S
+RF 17 SF
+( is the)S
+0 -646 M
+0 -13 R
+(handle name and )S
+IF 17 SF
+(kind)S
+RF 17 SF
+( indicates whether it manages input, output or both, )S
+IF 17 SF
+(oc)S
+RF 17 SF
+( whether it is opened or closed, )S
+0 -665 M
+IF 17 SF
+0 -13 R
+(fc)S
+RF 17 SF
+( whether it manages a file or channel, )S
+IF 17 SF
+(mode)S
+RF 17 SF
+( its buffering mode and )S
+IF 17 SF
+(echo)S
+RF 17 SF
+( whether echoing is enabled. )S
+0 -684 M
+0 -701 M
+BF 17 SF
+0 -14 R
+(4.9 Select)S
+0 -721 M
+0 -738 M
+0 -755 M
+FF 17 SF
+0 -12 R
+(> type SelectData = \([Handle], [Handle], Maybe Integer\))S
+0 -772 M
+0 -12 R
+(> select :: SelectData -> Maybe SelectData)S
+0 -789 M
+0 -806 M
+0 -13 R
+(SelectData)S
+RF 17 SF
+( consists of a set of input handles, a set of output handles, and an optional time interval.)S
+0 -825 M
+0 -842 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(select)S
+RF 17 SF
+( \()S
+IF 17 SF
+(ihs)S
+RF 17 SF
+(, )S
+IF 17 SF
+(ohs)S
+RF 17 SF
+(, )S
+IF 17 SF
+(mb)S
+RF 17 SF
+(\) waits for input or output to be possible on handles )S
+IF 17 SF
+(ihs)S
+RF 17 SF
+( or )S
+IF 17 SF
+(ohs)S
+0 -861 M
+RF 17 SF
+0 -13 R
+(respectively. If )S
+IF 17 SF
+(mb)S
+RF 17 SF
+( is )S
+FF 17 SF
+(Just)S
+RF 17 SF
+( )S
+IF 17 SF
+(i)S
+RF 17 SF
+( the computation waits at most )S
+IF 17 SF
+(i)S
+RF 17 SF
+( microseconds. When I/O becomes possible on)S
+0 -880 M
+0 -13 R
+(any of the handles the computation returns the sets of handles on which I/O is possible. If an interval )S
+0 -899 M
+FF 17 SF
+0 -13 R
+(Maybe)S
+RF 17 SF
+( )S
+IF 17 SF
+(i)S
+RF 17 SF
+( was given the remaining time of that is returned as well. If the timeout expires with I/O still not)S
+0 -918 M
+0 -13 R
+(possible the computation returns )S
+FF 17 SF
+(Nothing)S
+RF 17 SF
+(.)S
+0 -937 M
+0 -954 M
+0 -13 R
+(Implementation notes: )S
+0 -973 M
+48 -990 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Using )S
+FF 17 SF
+(select)S
+RF 17 SF
+( on buffered handles may cause unpredictable results unless the implementation is)S
+48 -1009 M
+0 -13 R
+(careful. )S
+48 -1028 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(Returning the remaining time interval can be problematic in UNIX version where )S
+FF 17 SF
+(select)S
+RF 17 SF
+( is not)S
+48 -1047 M
+0 -13 R
+(properly implemented, but you can still do it \(by calling )S
+FF 17 SF
+(gettimeofday)S
+RF 17 SF
+( before and after )S
+48 -1066 M
+FF 17 SF
+0 -13 R
+(select)S
+RF 17 SF
+(\). )S
+48 -1085 M
+0 -1102 M
+BF 18 SF
+0 -15 R
+(5 Operating System Interaction)S
+0 -1123 M
+showpage restore
+%%Page: 11 11
+save
+NP
+BF 18 SF
+0 0 M
+0 -17 M
+FF 17 SF
+0 -12 R
+(> deleteFile    :: String -> IO \(\))S
+0 -34 M
+0 -12 R
+(> statusFile    :: String -> IO String)S
+0 -51 M
+0 -12 R
+(> statusChan    :: String -> IO String)S
+0 -68 M
+0 -12 R
+(> getArgs       :: IO [String])S
+0 -85 M
+0 -12 R
+(> getProgName   :: IO String)S
+0 -102 M
+0 -12 R
+(> getEnv        :: String -> IO String)S
+0 -119 M
+0 -12 R
+(> setEnv        :: String -> String -> IO \(\))S
+0 -136 M
+0 -12 R
+(> getClock      :: IO Integer)S
+0 -153 M
+0 -12 R
+(> getCpuTime    :: IO Integer)S
+0 -170 M
+0 -12 R
+(> runProcess    :: String -> [Handle] -> IO \(\))S
+0 -187 M
+0 -12 R
+(> system        :: String -> IO String)S
+0 -204 M
+0 -221 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(deleteFile)S
+RF 17 SF
+( )S
+IF 17 SF
+(file)S
+RF 17 SF
+( deletes file )S
+IF 17 SF
+(file)S
+RF 17 SF
+(. Computations )S
+FF 17 SF
+(statusFile)S
+RF 17 SF
+( )S
+IF 17 SF
+(file)S
+RF 17 SF
+( and )S
+FF 17 SF
+(statusChan)S
+RF 17 SF
+( )S
+0 -240 M
+IF 17 SF
+0 -13 R
+(chan)S
+RF 17 SF
+( return status strings for file )S
+IF 17 SF
+(file)S
+RF 17 SF
+( and channel )S
+IF 17 SF
+(chan)S
+RF 17 SF
+(, as indicated in the Haskell 1.2 report \()S
+(Hudak 92)U
+(\).)S
+0 -259 M
+0 -13 R
+(These computations fails with )S
+0 -278 M
+48 -295 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SeekError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if file )S
+IF 17 SF
+(file)S
+RF 17 SF
+( or channel )S
+IF 17 SF
+(chan)S
+RF 17 SF
+( does not exist or, in the case of )S
+FF 17 SF
+(deleteFile)S
+RF 17 SF
+( )S
+IF 17 SF
+(file)S
+RF 17 SF
+(,)S
+48 -314 M
+0 -13 R
+(cannot be deleted. )S
+48 -333 M
+0 -350 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getArgs)S
+RF 17 SF
+( returns a list of the program's command line arguments \(not including the)S
+0 -369 M
+0 -13 R
+(program name\).)S
+0 -388 M
+0 -405 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getProgName)S
+RF 17 SF
+( returns the name of the program.)S
+0 -424 M
+0 -441 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getEnv)S
+RF 17 SF
+( )S
+IF 17 SF
+(var)S
+RF 17 SF
+( returns the value of the environment variable )S
+IF 17 SF
+(var)S
+RF 17 SF
+(. It fails with )S
+0 -460 M
+48 -477 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(SeekError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if variable )S
+IF 17 SF
+(var)S
+RF 17 SF
+( does not exist. )S
+48 -496 M
+0 -513 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(setEnv)S
+RF 17 SF
+( )S
+IF 17 SF
+(var)S
+RF 17 SF
+( )S
+IF 17 SF
+(val)S
+RF 17 SF
+( sets environment variable )S
+IF 17 SF
+(var)S
+RF 17 SF
+( to new value )S
+IF 17 SF
+(val)S
+RF 17 SF
+(. Variable )S
+IF 17 SF
+(var)S
+RF 17 SF
+( is created if it)S
+0 -532 M
+0 -13 R
+(does not already exist.)S
+0 -551 M
+0 -568 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getClock)S
+RF 17 SF
+( returns the number of microseconds since midnight, GMT, on January 1 1970.)S
+0 -587 M
+0 -604 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(getCpuTime)S
+RF 17 SF
+( returns the number of microseconds of cpu time devoted to the program so)S
+0 -623 M
+0 -13 R
+(far.)S
+0 -642 M
+0 -659 M
+0 -13 R
+(Computation )S
+FF 17 SF
+(runProcess)S
+RF 17 SF
+( )S
+IF 17 SF
+(cmd)S
+RF 17 SF
+( )S
+IF 17 SF
+(hdls)S
+RF 17 SF
+( creates a new operating system process executing command )S
+IF 17 SF
+(cmd)S
+RF 17 SF
+(. If)S
+0 -678 M
+0 -13 R
+(they are given, the first three handles in )S
+IF 17 SF
+(hdls)S
+RF 17 SF
+( are connected to the new process's standard input, output and)S
+0 -697 M
+0 -13 R
+(error channels, respectively. The first of these must be readable and the next two must be writable. The)S
+0 -716 M
+0 -13 R
+(remaining handles may be connected to other process channels in an implementation-dependent way. The)S
+0 -735 M
+0 -13 R
+(computation fails with )S
+0 -754 M
+48 -771 M
+0 -10 R
+ 3.454545 B
+FF 17 SF
+0 -3 R
+(OtherError)S
+RF 17 SF
+( )S
+IF 17 SF
+(msg)S
+RF 17 SF
+( if the process cannot be created. )S
+48 -790 M
+0 -807 M
+0 -13 R
+(Derived computation )S
+FF 17 SF
+(system)S
+RF 17 SF
+( )S
+IF 17 SF
+(cmd)S
+RF 17 SF
+( returns the output produced when command )S
+IF 17 SF
+(cmd)S
+RF 17 SF
+( is run as a separate)S
+0 -826 M
+0 -13 R
+(operating system process. )S
+0 -845 M
+0 -862 M
+0 -879 M
+FF 17 SF
+0 -12 R
+(> system cmd    =)S
+0 -896 M
+0 -12 R
+(>   openChan "" >>= \\handle ->)S
+0 -913 M
+0 -12 R
+(>   runProcess cmd [stdnull, handle, stdnull] >>)S
+0 -930 M
+0 -12 R
+(>   getContents handle)S
+0 -947 M
+0 -964 M
+BF 17 SF
+0 -14 R
+(5.1 Interrupts)S
+0 -984 M
+0 -1001 M
+0 -1018 M
+FF 17 SF
+0 -12 R
+(> setInterrupt  :: IO \(\) -> IO \(IO \(\)\))S
+0 -1035 M
+0 -1052 M
+RF 17 SF
+0 -13 R
+(Whenever a console interrupt occurs, the executing program is to be stopped and the )S
+IF 17 SF
+(interrupt handler)S
+RF 17 SF
+(, by)S
+0 -1071 M
+0 -13 R
+(default equal to the computation )S
+FF 17 SF
+(return \(\))S
+RF 17 SF
+(, executed in its place. Computation )S
+FF 17 SF
+(setInterrupt)S
+RF 17 SF
+( )S
+IF 17 SF
+(p)S
+0 -1090 M
+RF 17 SF
+0 -13 R
+(changes this default behaviour by installing )S
+IF 17 SF
+(p)S
+RF 17 SF
+( as the interrupt handler; it returns the previous interrupt)S
+0 -1109 M
+0 -13 R
+(handler as its answer. )S
+0 -1128 M
+showpage restore
+%%Page: 12 12
+save
+NP
+RF 17 SF
+0 0 M
+BF 18 SF
+0 -15 R
+(6 Monadic combinator)S
+0 -21 M
+0 -38 M
+0 -55 M
+FF 17 SF
+0 -12 R
+(> accumulate  :: [IO a] -> IO [a])S
+0 -72 M
+0 -12 R
+(> accumulate  =)S
+0 -89 M
+0 -12 R
+(>   foldr mcons \(return []\))S
+0 -106 M
+0 -12 R
+(>     where)S
+0 -123 M
+0 -12 R
+(>       mcons :: IO a -> IO [a] -> IO [a])S
+0 -140 M
+0 -12 R
+(>       mcons p q = p >>= \\x -> q >>= \\y -> return \(x : y\))S
+0 -157 M
+0 -12 R
+(>)S
+0 -174 M
+0 -12 R
+(> accumulate_ :: [IO a] -> IO \(\))S
+0 -191 M
+0 -12 R
+(> accumulate_ = foldr \(>>\) \(return \(\)\))S
+0 -208 M
+0 -225 M
+RF 17 SF
+0 -13 R
+(Computation )S
+FF 17 SF
+(accumulate)S
+RF 17 SF
+( )S
+IF 17 SF
+(ps)S
+RF 17 SF
+( runs each of the computations in )S
+IF 17 SF
+(ps)S
+RF 17 SF
+( in sequence, and accumulates the)S
+0 -244 M
+0 -13 R
+(results, which are returned as a list. Computation )S
+FF 17 SF
+(accumulate_)S
+RF 17 SF
+( )S
+IF 17 SF
+(ps)S
+RF 17 SF
+( runs the same computations, but)S
+0 -263 M
+0 -13 R
+(discards the results and returns )S
+FF 17 SF
+(\(\))S
+RF 17 SF
+(. )S
+0 -282 M
+0 -299 M
+BF 18 SF
+0 -15 R
+(7 Changes to Haskell 1.2)S
+0 -320 M
+0 -337 M
+RF 17 SF
+0 -13 R
+(We propose that the )S
+FF 17 SF
+(PreludeIO)S
+RF 17 SF
+( module be removed from Haskell, and that a )S
+FF 17 SF
+(PreludeMonadicIO)S
+0 -356 M
+RF 17 SF
+0 -13 R
+(module, whose header is given in )S
+(Section 2)U
+(, be inserted in its place. A Haskell program is determined by the)S
+0 -375 M
+0 -13 R
+(identifier )S
+FF 17 SF
+(main)S
+RF 17 SF
+( in module )S
+FF 17 SF
+(Main)S
+RF 17 SF
+(, whose type must be )S
+FF 17 SF
+(IO \(\))S
+RF 17 SF
+(, that is, )S
+FF 17 SF
+(PrimIO \(Either IOError)S
+0 -394 M
+0 -13 R
+(\(\)\))S
+RF 17 SF
+(. The Haskell program begins with computation )S
+FF 17 SF
+(main)S
+RF 17 SF
+(. If )S
+FF 17 SF
+(main)S
+RF 17 SF
+( returns answer )S
+FF 17 SF
+(Right)S
+RF 17 SF
+( )S
+FF 17 SF
+(\(\))S
+RF 17 SF
+(, the)S
+0 -413 M
+0 -13 R
+(Haskell program immediately terminates, indicating successful termination to the operating system. If )S
+0 -432 M
+FF 17 SF
+0 -13 R
+(main)S
+RF 17 SF
+( returns answer )S
+FF 17 SF
+(Left)S
+RF 17 SF
+( )S
+IF 17 SF
+(error)S
+RF 17 SF
+(, the Haskell program displays a textual form of the error )S
+IF 17 SF
+(error)S
+RF 17 SF
+( and then)S
+0 -451 M
+0 -13 R
+(terminates, indicating unsuccessful termination to the operating system.)S
+0 -470 M
+0 -487 M
+0 -13 R
+(The exact mechanism is likely to be implementation dependent, but we encourage systems supporting)S
+0 -506 M
+0 -13 R
+(Haskell 1.2 I/O to continue to do so via some form of compatibility module or command-line flag.)S
+0 -525 M
+0 -542 M
+0 -13 R
+(Here is a summary of the main Haskell 1.2 I/O operations that cannot be directly expressed in the proposed)S
+0 -561 M
+0 -13 R
+(I/O mechanism. )S
+0 -580 M
+48 -597 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We omit the )S
+FF 17 SF
+(Dialogue)S
+RF 17 SF
+( type and stream-based I/O. Continuation-passing I/O can be simulated)S
+48 -616 M
+0 -13 R
+(using computations of type )S
+FF 17 SF
+(IO \(\))S
+RF 17 SF
+(. )S
+48 -635 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We omit I/O of )S
+FF 17 SF
+(Bin)S
+RF 17 SF
+( values, but see the proposal of a new )S
+FF 17 SF
+(Binary)U
+RF 17 SF
+( class)U
+(. )S
+48 -654 M
+0 -9 R
+ 3.454545 B
+0 -4 R
+(We drop the )S
+FF 17 SF
+(echo)S
+RF 17 SF
+( channel \(although echoing is supported on )S
+FF 17 SF
+(stdin)S
+RF 17 SF
+( via )S
+FF 17 SF
+(setEcho)S
+RF 17 SF
+(\) and do not)S
+48 -673 M
+0 -13 R
+(introduce any monadic operations corresponding to the optional 1.2 requests. These requests have)S
+48 -692 M
+0 -13 R
+(not been widely implemented. )S
+48 -711 M
+0 -728 M
+BF 18 SF
+0 -15 R
+(Bibliography)S
+0 -749 M
+0 -766 M
+RF 17 SF
+0 -14 R
+(John Cupitt, )S
+BF 17 SF
+(A brief walk through KAOS)S
+RF 17 SF
+(. Technical Report 58, Computing Laboratory, University of)S
+0 -786 M
+0 -13 R
+(Kent at Canterbury, February 1989.)S
+0 -805 M
+0 -822 M
+0 -14 R
+(Andrew D. Gordon, )S
+BF 17 SF
+(Functional Programming and Input/Output)U
+RF 17 SF
+(. PhD dissertation, University of)S
+0 -842 M
+0 -13 R
+(Cambridge, August 1992. To be published by Cambridge University Press.)S
+0 -861 M
+0 -878 M
+0 -13 R
+(Paul Hudak and Simon L. Peyton Jones and Philip Wadler et al, )S
+(Report on the Functional Programming)U
+0 -897 M
+0 -14 R
+(Language Haskell: A Non-strict, Purely Functional Language Version 1.2.)U
+( )S
+BF 17 SF
+(SIGPLAN Notices)S
+RF 17 SF
+(, 27\(5\))S
+0 -917 M
+0 -13 R
+(\(ACM, March 1992\). )S
+0 -936 M
+0 -953 M
+0 -14 R
+(John Launchbury and Simon L. Peyton Jones, Lazy Functional State Threads. )S
+BF 17 SF
+(Proceedings Programming)S
+0 -973 M
+0 -14 R
+(Language Design and Implementation 1994, )S
+RF 17 SF
+(\(to appear\).)S
+0 -993 M
+0 -1010 M
+0 -14 R
+(Simon L. Peyton Jones and Philip Wadler, )S
+(Imperative functional programming.)U
+( )S
+BF 17 SF
+(Proceedings 20th ACM)S
+0 -1030 M
+0 -14 R
+(Symposium on Principles of Programming Languages, Charleston, South Carolina, January 1993)S
+0 -1050 M
+RF 17 SF
+0 -13 R
+(\(ACM, 1993\).)S
+0 -1069 M
+0 -1086 M
+0 -14 R
+(Philip Wadler, )S
+(The essence of functional programming.)U
+( )S
+BF 17 SF
+(Proceedings of the 19th ACM Symposium on)S
+0 -1106 M
+0 -14 R
+(Principles of Programming Languages, January 1992)S
+RF 17 SF
+( \(ACM, 1992\).)S
+0 -1126 M
+showpage restore
+%%Page: 13 13
+save
+NP
+RF 17 SF
+0 0 M
+747 HR
+0 -19 M
+0 -36 M
+20 dict begin
+
+/pix 9 string def
+
+gsave currentpoint 65 sub translate 0 2 translate 65 65 scale
+65 65 1
+[65 0 0 -65 0 65]
+
+{currentfile pix readhexstring pop}
+image
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffe7fe00ffffffffffffe3f0001ffffffffff8e3c00007fffffffff863000001fffffff
+ffc22000000fffffffffe040000007fffffffff080000003fffffffff900000001ffffffff8100
+000001dfffffff82000000018fffffffe2000000038ffffffffc000000050f8ffffffc00000003
+0f0ffffffc000000058f17fffff80000003e8c2ffffff800000063805ffffff80000004000bfff
+ffe800000060407fffff883c0000382071fffc087e00000c0000fff8087e00000a0002fff0387f
+00f0150005fff0087fc3f00b80abfff0047cfff015c15fffff84607ff02ec2fffffffde03ff057
+63ffffffff001ff0aee1fffffffe003fe05ff1fffffffc00ffe0a8f0fffffff803ff015470ffff
+fff0063e03fa787fffffe00400057d387fffffe00c000aae983fffffe01400555f483fffffc02c
+0aaaffac3fffffcc5f5555ffd63fffffc82feaafffea1fffffc85ffffffff41fffffc8bfffffff
+fa1fffffe17ffffffffd0ffffff2fffffffffeafffffffffffffffffdfffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+end
+grestore
+65 0 R
+BF 18 SF
+0 -63 R
+(Appendix: Unresolved Issues)S
+0 -105 M
+0 -122 M
+RF 17 SF
+0 -13 R
+(We are considering the following extensions to this proposal. We haven't worked out all the details. We)S
+0 -141 M
+0 -13 R
+(would like to include some form of each of these proposals in the final 1.3 Definition, but are reluctant to)S
+0 -160 M
+0 -13 R
+(do so without implementation experience. Therefore we'd strongly encourage experimentation! )S
+0 -179 M
+0 -196 M
+BF 17 SF
+0 -14 R
+(Binary Input/Output)S
+0 -216 M
+0 -233 M
+RF 17 SF
+0 -13 R
+(Haskell 1.2 called for a )S
+FF 17 SF
+(Bin)S
+RF 17 SF
+( datatype, whose elements were suitable for "binary" I/O using specialised)S
+0 -252 M
+0 -13 R
+(versions of the file and channel I/O operations. Values of other types could be embedded as values of type )S
+0 -271 M
+FF 17 SF
+0 -13 R
+(Bin)S
+RF 17 SF
+(. We want to support binary input/output of data, but it is awkward to implement the )S
+FF 17 SF
+(Bin)S
+RF 17 SF
+(. Instead we)S
+0 -290 M
+0 -13 R
+(are considering a new class, )S
+FF 17 SF
+(Binary)S
+RF 17 SF
+(, )S
+0 -309 M
+0 -326 M
+0 -343 M
+FF 17 SF
+0 -12 R
+(> class Binary a where)S
+0 -360 M
+0 -12 R
+(>   putBin :: Handle -> a -> IO \(\))S
+0 -377 M
+0 -12 R
+(>   getBin :: Handle -> IO a)S
+0 -394 M
+0 -411 M
+RF 17 SF
+0 -13 R
+(whose instances would include \(at least\) )S
+FF 17 SF
+(Float)S
+RF 17 SF
+(. Full details of this scheme remain to be worked out. )S
+0 -430 M
+0 -447 M
+BF 17 SF
+0 -14 R
+(Blocking )S
+FF 17 SF
+(runProcess)S
+0 -467 M
+0 -484 M
+RF 17 SF
+0 -13 R
+(There is no way at present to examine the return code of an operating system process started by a Haskell)S
+0 -503 M
+0 -13 R
+(program. One way to do so would be to include a primitive operation )S
+0 -522 M
+0 -539 M
+0 -556 M
+FF 17 SF
+0 -12 R
+(  runProcessNow :: String -> [Handle] -> IO Bool)S
+0 -573 M
+0 -590 M
+RF 17 SF
+0 -13 R
+(with the same behaviour as )S
+FF 17 SF
+(runProcess)S
+RF 17 SF
+(, except that the computation blocks until the spawned process)S
+0 -609 M
+0 -13 R
+(has terminated and then its answer indicates whether termination was successful. )S
+0 -628 M
+0 -645 M
+BF 17 SF
+0 -14 R
+(More Flexible Interrupts)S
+0 -665 M
+0 -682 M
+RF 17 SF
+0 -13 R
+(We are considering a more flexible interrupt mechanism \(suggested by Jim Mattson\) in which there is an)S
+0 -701 M
+0 -13 R
+(enumerated type of possible interrupts, )S
+0 -720 M
+0 -737 M
+0 -754 M
+FF 17 SF
+0 -12 R
+(data Interrupt = InternalAbort)S
+0 -771 M
+0 -12 R
+(               | RealTimeAlarm)S
+0 -788 M
+0 -12 R
+(               | FloatingPointException)S
+0 -805 M
+0 -12 R
+(               | LostConnection)S
+0 -822 M
+0 -12 R
+(               | IllegalInstruction)S
+0 -839 M
+0 -12 R
+(               | KeyboardInterrupt)S
+0 -856 M
+0 -12 R
+(               | OpenEndedPipe)S
+0 -873 M
+0 -12 R
+(               | KeyboardTermination)S
+0 -890 M
+0 -12 R
+(               | SegmentationViolation)S
+0 -907 M
+0 -12 R
+(               | SoftwareTermination)S
+0 -924 M
+0 -12 R
+(               | UserDefinedSignal Int)S
+0 -941 M
+0 -955 M
+RF 17 SF
+0 -13 R
+(to each of which is associated a handler of type )S
+FF 17 SF
+(IO \(\))S
+RF 17 SF
+(. Each default handler is )S
+FF 17 SF
+(failwith)S
+0 -974 M
+0 -13 R
+("Interrupt!")S
+RF 17 SF
+(, but given )S
+0 -993 M
+0 -1010 M
+0 -1027 M
+FF 17 SF
+0 -12 R
+(setHandler :: Interrupt -> IO \(\) -> IO \(IO \(\)\))S
+0 -1044 M
+0 -1058 M
+RF 17 SF
+0 -13 R
+(the handler for interrupt )S
+IF 17 SF
+(i)S
+RF 17 SF
+( may be updated to be )S
+IF 17 SF
+(h)S
+RF 17 SF
+( by the computation )S
+FF 17 SF
+(setHandler)S
+RF 17 SF
+( )S
+IF 17 SF
+(i)S
+RF 17 SF
+( )S
+IF 17 SF
+(h)S
+RF 17 SF
+(, which returns the)S
+0 -1077 M
+0 -13 R
+(previous handler as its answer. Finally given )S
+0 -1096 M
+0 -1113 M
+showpage restore
+%%Page: 14 14
+save
+NP
+RF 17 SF
+0 0 M
+FF 17 SF
+0 -12 R
+(unsetHandler :: Interrupt -> IO \(IO \(\)\))S
+0 -17 M
+0 -31 M
+RF 17 SF
+0 -13 R
+(the computation )S
+FF 17 SF
+(unsetHandler)S
+RF 17 SF
+( )S
+IF 17 SF
+(i)S
+RF 17 SF
+( disables )S
+IF 17 SF
+(i)S
+RF 17 SF
+( interrupts, and returns the previously installed handler. )S
+0 -50 M
+0 -67 M
+BF 17 SF
+0 -14 R
+(Exposing )S
+FF 17 SF
+(PrimIO)S
+0 -87 M
+0 -104 M
+RF 17 SF
+0 -13 R
+(We're considering making global the )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( type and its values )S
+FF 17 SF
+(returnPrimIO)S
+RF 17 SF
+( and )S
+FF 17 SF
+(thenPrimIO)S
+RF 17 SF
+(.)S
+0 -123 M
+0 -13 R
+(The advantage would be that monads could be freely built on top of )S
+FF 17 SF
+(PrimIO)S
+RF 17 SF
+( without the failure-handling)S
+0 -142 M
+0 -13 R
+(baggage of )S
+FF 17 SF
+(IO)S
+RF 17 SF
+(. The disadvantage would be that efficient implementations of )S
+FF 17 SF
+(IO)S
+RF 17 SF
+( may be hampered if it is)S
+0 -161 M
+0 -13 R
+(no longer an abstract type. )S
+0 -180 M
+0 -197 M
+747 HR
+0 -216 M
+0 -13 R
+(Please ignore this section!)S
+0 -235 M
+0 -252 M
+0 -13 R
+(> type Integer = Int > data PrimIO a = PrimIO a > data Handle = Handle > \(returnPrimIO, thenPrimIO,)S
+0 -271 M
+0 -13 R
+(stdin, stdout, stderr, stdnull, > openFile, openChan, flush, close, ready, hGetChar, getContents, hPutChar, >)S
+0 -290 M
+0 -13 R
+(setBuffering, seek, query, select, getClock, runProcess, deleteFile, > statusFile, statusChan, getArgs,)S
+0 -309 M
+0 -13 R
+(getProgName, allowInterrupt, > getEnv, setEnv, select\) = x where x=x )S
+0 -328 M
+747 HR
+0 -347 M
+0 -364 M
+BF 18 SF
+0 -15 R
+(Recent Changes to the Proposal)S
+0 -385 M
+0 -402 M
+RF 17 SF
+0 -13 R
+(940706 )S
+48 -421 M
+0 -13 R
+(Fixed some minor glitches reported by Jim Mattson. )S
+0 -440 M
+0 -13 R
+(940708 )S
+48 -459 M
+0 -13 R
+(Fixed infelicitous namings following complaints from Jon Fairbairn \(including renaming the)S
+48 -478 M
+0 -13 R
+(constructors of type )S
+FF 17 SF
+(BufferMode)S
+RF 17 SF
+(\). )S
+0 -497 M
+0 -13 R
+(940718 )S
+48 -516 M
+0 -13 R
+(Restored main programs to type )S
+FF 17 SF
+(IO \(\))S
+RF 17 SF
+(. )S
+48 -535 M
+FF 17 SF
+0 -13 R
+(\(..\))S
+RF 17 SF
+( added to algebraic datatypes in the module header, to export their \(data\) constructors. )S
+48 -554 M
+0 -571 M
+747 HR
+0 -590 M
+IF 17 SF
+0 -13 R
+(A Proposal for Monadic I/O in Haskell 1.3 )S
+0 -609 M
+0 -626 M
+0 -13 R
+(Haskell 1.3 Committee )S
+0 -645 M
+0 -13 R
+(haskell1.3@comp.vuw.ac.nz )S
+0 -664 M
+0 -681 M
+0 -700 M
+747 HR
+0 -719 M
+0 -736 M
+BF 18 SF
+0 -15 R
+showpage restore
+%%Trailer
+restore
+%%Pages: 14
