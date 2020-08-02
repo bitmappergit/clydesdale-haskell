@@ -10,8 +10,8 @@
 ;;; MCL implements CLtL2 rather than CLtL1.  However, we still have a
 ;;; few references to the LISP package around in our code.
 
-;(if (not (find-package "LISP"))
-;    (rename-package "COMMON-LISP" "COMMON-LISP" '("CL" "LISP")))
+(if (not (find-package "LISP"))
+    (defpackage "LISP" (:use :cl)))
 
 
 ;;; Create the mumble-implementation package.  It's important to do this
