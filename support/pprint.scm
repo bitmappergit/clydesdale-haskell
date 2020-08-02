@@ -40,17 +40,17 @@
 
 
 ;;; External variables.  These may be specially bound by user code.
-
+#|
 (define *print-escape*           '#t)
 (define *print-circle*           '#f)
 (define *print-level*            '#f)
 (define *print-length*           '#f)
 (define *print-base*             10)
 (define *print-radix*            '#f)
-
+|#
 
 (define *print-shared*           '#f)
-(define *print-pretty*           '#f)
+;;(define *print-pretty*           '#f)
 (define *print-right-margin*     '#f)
 (define *print-miser-width*      40)
 (define *print-lines*            '#f)

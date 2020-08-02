@@ -573,21 +573,22 @@
 	(uninitialized? nil))
     (if (or (not (consp slot))
 	    (not (symbolp (setf name (car slot)))))
-	(invalid-slot-error slot struct-name))
+      (invalid-slot-error slot struct-name))
     (dolist (junk (cdr slot))
-      (cond ((eq (car junk) 'type)
+      (cond
+      ((string= (car junk) 'type)
 	     (setf type (cadr junk)))
-	    ((eq (car junk) 'default)
+	    ((string= (car junk) 'default)
 	     (setf default (cadr junk))
 	     (setf required? nil))
-	    ((eq (car junk) 'bit)
+	    ((string= (car junk) 'bit)
 	     (setf bit (cadr junk)))
-	    ((eq (car junk) 'read-only?)
+	    ((string= (car junk) 'read-only?)
 	     (setf read-only? (cadr junk)))
-	    ((eq (car junk) 'uninitialized?)
+	    ((string= (car junk) 'uninitialized?)
 	     (setf uninitialized? (cadr junk)))
 	    (t
-	     (invalid-slot-error slot struct-name))))
+       (invalid-slot-error slot struct-name))))
     (values
       name
       type

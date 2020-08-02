@@ -162,7 +162,7 @@
 
 (defpackage "MUMBLE-USER"
   (:use "MUMBLE")
-  (:shadow #:type))
+  (:shadow :type))
 
 
 ;;; Compile and load the rest of the system.  (The Lucid compiler is fast

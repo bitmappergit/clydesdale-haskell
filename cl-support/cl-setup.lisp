@@ -16,7 +16,7 @@
 
 #-clisp
 (unless (find-package "MUMBLE")
-  (make-package "MUMBLE" :use nil))
+  (defpackage "MUMBLE" (:use)))
 
 #+clisp
 (cl:in-package "MUMBLE" :use '())
