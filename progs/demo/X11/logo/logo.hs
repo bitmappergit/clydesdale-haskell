@@ -216,7 +216,7 @@ evaluate e1            (Print [a])                  ss fail succ
   -- user output
 
 evaluate e             (Argument (Val (Word n)))    ss fail succ
-  = lookup e n ss fail $ \v ->
+  = plookup e n ss fail $ \v ->
     succ v e ss
   -- variable reference
 
@@ -304,15 +304,15 @@ makeReadList (w:ws) = (Word w) :* (makeReadList ws)
 -- look up a variable reference in the variable environment
 -- search the most-local environments first
 -- return an error if not found
-lookup :: EnvsType -> NameType -> StateType -> EvalFailType ->
+plookup :: EnvsType -> NameType -> StateType -> EvalFailType ->
           (Value -> IO ()) -> IO ()
-lookup ([],ps,ttl)             name ss fail succ
+plookup ([],ps,ttl)             name ss fail succ
   = fail ("Unbound variable:  " ++ name) ss
-lookup ([]:vss,ps,ttl)         name ss fail succ
-  = lookup (vss,ps,ttl) name ss fail succ
-lookup (((n,v):vs):vss,ps,ttl) name ss fail succ
+plookup ([]:vss,ps,ttl)         name ss fail succ
+  = plookup (vss,ps,ttl) name ss fail succ
+plookup (((n,v):vs):vss,ps,ttl) name ss fail succ
   | n == name = succ v
-  | otherwise = lookup (vs:vss,ps,ttl) name ss fail succ
+  | otherwise = plookup (vs:vss,ps,ttl) name ss fail succ
 
 -- update the variable environment
 -- replace the most-local occurrance  first; if none are found,

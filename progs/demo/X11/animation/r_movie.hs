@@ -11,7 +11,7 @@
 module R_Movie (ht, wid, orig,
                 above, rABOVE, beside, rBESIDE,rBESIDE2, over, rOVER,
                 overlay, rOVERLAY, pUT,
-                uncurry, curry
+--                uncurry, curry
                 ) where
 
 import R_Ptypes
@@ -104,11 +104,11 @@ pUT = promote3 put_Pic
 
   -- uncurry takes a function that takes two elements and a list of
   -- two elements and applies the function to them.
-uncurry:: (a->a->b) -> [a] -> b
-uncurry f [a,b] = f a b
+--uncurry:: (a->a->b) -> [a] -> b
+--uncurry f [a,b] = f a b
 
   -- curry takes a function that takes a list, and two elements, and
   -- then applies the function to the elements in a list.
-curry:: ([a]->b) -> a -> a -> b
-curry f a b = f [a,b]
+--curry:: ([a]->b) -> a -> a -> b
+--curry f a b = f [a,b]
 

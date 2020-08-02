@@ -549,7 +549,7 @@ data XScreenSaver {-# STRICT #-} = XScreenSaver Int Int Bool Bool
 ImportLispType (
    XMaybe (XSome ("not-null?", "identity", "identity"),
            XNull ("null?", "'()")),
-   XError (XError ("cons-xerror", "x-error-string")),
+   XError (XError ("xlib::x-error", "string")),
    XBitmap (XBitmap ("mk-bitmap", "sel-bitmap")),
    XKeysymTable (XKeysymTable ("mk-keysym-table", "sel-keysym-table")),
    XBitVec (XBitVec ("mk-bitvec", "sel-bitvec")),
@@ -858,7 +858,7 @@ ImportLispType (
 	     XSouth (":south"),
 	     XSouthEast (":south-east"),
 	     XSouthWest (":south-west"),
-	     XWest ("west")),
+	     XWest (":west")),
    XWindowClass (XInputOutput (":input-output"),
                  XInputOnly (":input-only")),
    XMapState (XUnmapped (":unmapped"),
