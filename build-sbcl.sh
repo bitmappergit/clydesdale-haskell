@@ -1,3 +1,25 @@
-find . -name '*.fasl' | xargs rm
+mkdir -p ast/sbcl/
+mkdir -p backend/sbcl/
+mkdir -p bin/sbcl/
+mkdir -p cfn/sbcl/
+mkdir -p cl-support/sbcl/
+mkdir -p command-interface/sbcl/
+mkdir -p csys/sbcl/
+mkdir -p depend/sbcl/
+mkdir -p derived/sbcl/
+mkdir -p doc/sbcl/
+mkdir -p emacs-tools/sbcl/
+mkdir -p flic/sbcl/
+mkdir -p import-export/sbcl/
+mkdir -p parser/sbcl/
+mkdir -p prec/sbcl/
+mkdir -p printers/sbcl/
+mkdir -p progs/sbcl/
+mkdir -p runtime/sbcl/
+mkdir -p support/sbcl/
+mkdir -p tdecl/sbcl/
+mkdir -p top/sbcl/
+mkdir -p type/sbcl/
+mkdir -p util/sbcl/
 Y2=$PWD HASKELL=$PWD PRELUDE=$PWD/progs/prelude PRELUDEBIN=$PWD/progs/prelude/sbcl sbcl --eval "(progn (if (not (find-package \"MUMBLE-IMPLEMENTATION\")) (make-package \"MUMBLE-IMPLEMENTATION\" :use '(\"COMMON-LISP\")) (in-package \"MUMBLE-IMPLEMENTATION\")))" --load com/sbcl/sbcl-setup.lisp --load cl-support/cl-init.lisp
 # --load com/sbcl/savesys.lisp
