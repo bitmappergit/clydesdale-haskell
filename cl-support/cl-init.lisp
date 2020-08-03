@@ -146,7 +146,7 @@
 ;;; Compile and load the rest of the system.  (The Lucid compiler is fast
 ;;; enough to make it practical to compile things all the time.)
 
-(eval-when (eval compile load)
+(eval-when (:compile-toplevel :load-toplevel :execute)
   (setf *package* (find-package "MUMBLE-USER")))
 
 (load "$Y2/support/system")
